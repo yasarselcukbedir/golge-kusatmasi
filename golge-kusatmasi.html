@@ -27,6 +27,18 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
 #mini{position:absolute;top:8px;right:max(8px,env(safe-area-inset-right,0px));width:120px;height:80px;border:1px solid var(--line);border-radius:6px;background:rgba(20,26,17,.85);touch-action:none;z-index:2}
 #btnPause{position:absolute;top:8px;left:max(8px,env(safe-area-inset-left,0px));width:34px;height:30px;border:1px solid var(--line);border-radius:6px;background:rgba(30,25,19,.85);color:var(--fg);font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.1em;cursor:pointer;z-index:2}
 #btnPause.on{border-color:var(--gold);color:var(--gold)}
+#btnSet{border:1px solid var(--line);border-radius:6px;background:var(--panel2);color:var(--fg);font-size:14px;width:30px;height:26px;padding:0;cursor:pointer}
+#settings{position:absolute;inset:0;background:rgba(10,8,5,.82);display:flex;align-items:center;justify-content:center;z-index:6;padding:16px}
+#settings .sbox{width:100%;max-width:320px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+#settings h2{font-family:var(--display);font-size:16px;letter-spacing:.06em;color:var(--gold);margin:0 0 4px}
+#settings .srow{display:flex;justify-content:space-between;align-items:center;width:100%;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--fg);padding:10px 12px;font-size:13px;cursor:pointer;font-family:var(--body)}
+#settings .srow b{color:var(--gold);font-weight:600}
+#settings .sbtns{display:flex;gap:8px;margin-top:4px}
+#settings .sbtns button{flex:1;border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--fg);padding:10px;font-family:var(--display);font-weight:700;letter-spacing:.06em;font-size:12px;cursor:pointer}
+#settings #btnMenu{border-color:var(--gold);color:var(--gold)}
+#overlay .stats{display:grid;grid-template-columns:1fr auto;gap:4px 14px;font-size:12.5px;color:var(--fg);text-align:left;width:100%;max-width:300px;font-variant-numeric:tabular-nums}
+#overlay .stats span:nth-child(odd){color:var(--muted)}
+#overlay .ebtns{display:flex;gap:8px}
 .mode .mlbl,.mode .msep{align-self:center;font-size:11px;color:var(--muted);padding:0 2px}
 #hint{position:absolute;left:0;right:0;bottom:6px;text-align:center;font-size:12px;color:var(--fg);pointer-events:none;text-shadow:0 1px 3px #000;opacity:.9;padding:0 12px}
 #panel{background:var(--panel);border-top:1px solid var(--line);padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:8px}
@@ -79,11 +91,23 @@ canvas{display:block;width:100%;height:100%;touch-action:none}
     <span class="stat">Tabur <b id="hPop">0/6</b></span>
     <span class="stat pp">Güç <b id="hPP">0</b></span>
     <span class="stat"><b id="hTime">0:00</b></span>
+    <button id="btnSet" type="button" aria-label="Ayarlar">⚙</button>
   </header>
   <div id="stage">
     <canvas id="map"></canvas>
     <canvas id="mini" width="120" width="120"></canvas>
     <button id="btnPause" type="button" aria-label="Duraklat">II</button>
+    <div id="settings" hidden>
+      <div class="sbox">
+        <h2>Ayarlar</h2>
+        <button type="button" class="srow" data-k="sfx"><span>Ses efektleri</span><b></b></button>
+        <button type="button" class="srow" data-k="music"><span>Müzik</span><b></b></button>
+        <button type="button" class="srow" data-k="vib"><span>Titreşim</span><b></b></button>
+        <button type="button" class="srow" data-k="gfx"><span>Grafik</span><b></b></button>
+        <button type="button" class="srow" data-k="tut"><span>Öğretici</span><b></b></button>
+        <div class="sbtns"><button type="button" id="btnMenu">Ana Menü</button><button type="button" id="btnSetClose">Kapat</button></div>
+      </div>
+    </div>
     <div id="hint"></div>
     <div id="overlay">
       <div class="box">
@@ -289,9 +313,10 @@ function moveToward(u,tx,ty,dt){
   const sp=u.speed*(u.auraSpd||1)*(u.spdUntil>S.t?u.spdMul:1);
   const s=Math.min(d,sp*dt);u.x+=dx/d*s;u.y+=dy/d*s;u.face=Math.atan2(dy,dx);
 }
-function fx(kind,x,y,extra){S.effects.push({kind,x,y,t:0,extra});}
+function fx(kind,x,y,extra){S.effects.push({kind,x,y,t:0,extra});
+  if(kind==='slash')sfx('slash',volAt(x,y));else if(kind==='boom')sfx('boom',volAt(x,y));else if(kind==='die')sfx('die',volAt(x,y));else if(kind==='order')sfx('order');else if(kind==='ring'||kind==='flash'||kind==='bolt')sfx('ability',volAt(x,y));else if(kind==='levelup')sfx('levelup',volAt(x,y));}
 let gestured=false;window.addEventListener('pointerdown',()=>{gestured=true;},{once:true,capture:true});
-function buzz(ms){if(!gestured)return;try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
+function buzz(ms){if(ms<=8)sfx('tap');if(!gestured||!SET.vib)return;try{if(navigator.vibrate)navigator.vibrate(ms);}catch(e){}}
 function onTap(el,fn){let st=null;el.addEventListener('pointerdown',ev=>{st={x:ev.clientX,y:ev.clientY};});el.addEventListener('pointerup',ev=>{if(!st)return;const mv=Math.hypot(ev.clientX-st.x,ev.clientY-st.y);st=null;if(mv>10)return;ev.preventDefault();fn();});el.addEventListener('pointercancel',()=>{st=null;});}
 
 function spawnUnit(side,type,x,y,extra){
@@ -303,7 +328,7 @@ function spawnHero(side,key){
   const d=heroDef(side,key);const g=S.gate[side];
   const tn=FACTIONS[S.fac[side]].tune||1;
   const u={id:S.nextId++,side,type:'hero',hero:key,d:Object.assign({soldiers:1,aggro:90},d),x:g.x+rnd(-8,8),y:g.y+(TEAM[side]===0?10:-10),hp:d.hp*tn,maxHp:d.hp*tn,tn,lvl:1,xp:0,lastHit:-99,order:null,target:null,cd:0.3,buffUntil:0,buffMul:1.5,abCd:0,dead:false,r:8,kind:'unit',speed:d.speed,face:TEAM[side]===0?-Math.PI/2:Math.PI/2};
-  S.units.push(u);S.heroCount=S.heroCount||{};S.heroCount[side]=(S.heroCount[side]||0)+1;fx('ring',u.x,u.y,'heal');fx('text',u.x,u.y-14,d.name+' geldi');return u;
+  S.units.push(u);S.heroCount=S.heroCount||{};S.heroCount[side]=(S.heroCount[side]||0)+1;fx('ring',u.x,u.y,'heal');fx('text',u.x,u.y-14,d.name+' geldi');if(side==='p')sfx('hero');return u;
 }
 function heroCost(side,key){const d=heroDef(side,key);return S.heroOwned[side][key]?Math.round(d.cost*0.6):d.cost;}
 function heroState(side,key){if(heroByKey(side,key))return 'alive';if(S.heroT[side][key]>0)return 'coming';return 'none';}
@@ -318,7 +343,7 @@ function slotBuilding(side,i){return S.buildings.find(b=>b.side===side&&b.slot==
 function build(side,i,type){
   const d=BT[type];
   if(S.gold[side]<d.cost||slotBuilding(side,i))return false;
-  S.gold[side]-=d.cost;
+  S.gold[side]-=d.cost;if(side==='p')sfx('build');
   const p=slotPos(side,i);
   S.buildings.push({id:S.nextId++,side,slot:i,x:p.x,y:p.y,type,hp:d.hp,maxHp:d.hp,prog:0,q:null,kind:'bld',r:9,dead:false});
   return true;
@@ -356,7 +381,7 @@ function attack(u,t){
   if(u.side!=='n')dmg*=1+0.25*S.forge[u.side];
   if(u.buffUntil>S.t)dmg*=u.buffMul;
   if(u.auraDmg)dmg*=u.auraDmg;
-  if(d.range>30)S.projectiles.push({x:u.x,y:u.y,target:t,dmg,side:u.side,speed:170,src:u});
+  if(d.range>30){S.projectiles.push({x:u.x,y:u.y,target:t,dmg,side:u.side,speed:170,src:u});sfx('arrow',volAt(u.x,u.y));}
   else{hit(t,dmg,u);fx('slash',t.x+rnd(-4,4),t.y+rnd(-4,4));}
   if(u.type==='hero'&&u.d.multishot){let b2=null,bd=d.range+10;for(const v of S.units){if(v===t||v.dead||!hostile(u.side,v.side))continue;const dd=dist(u,v)-v.r;if(dd<bd){bd=dd;b2=v;}}if(b2)S.projectiles.push({x:u.x,y:u.y,target:b2,dmg:dmg*0.5,side:u.side,speed:170,src:u});}
 }
@@ -364,12 +389,13 @@ function hit(t,dmg,src){
   if(t.dead)return;
   if(t.vulnUntil>S.t)dmg*=1.2;
   t.hp-=dmg;if(t.kind==='unit')t.lastHit=S.t;
+  if(t.kind==='keep'&&t.side==='p'&&!S.sim){if(!S.alarmT||S.t-S.alarmT>12){S.alarmT=S.t;sfx('alarm');S.msg={t:S.t,txt:'Kalen saldırı altında!'};}}
   if(src&&src.side!=='n'&&t.side!=='n'&&S.pp[src.side]!=null)S.pp[src.side]+=dmg/15;
   if(src&&src.kind==='unit'&&!src.dead&&t.side!=='n')gainXp(src,(t.kind==='unit'?dmg:dmg*0.4)/10);
   if(t.hp<=0){
     t.hp=0;
     if(t.kind==='unit')killUnit(t,src);
-    else if(t.kind==='bld')destroyBld(t);
+    else if(t.kind==='bld'){if(t.side==='p')statInc('bldLost');else if(src&&src.side==='p')statInc('bldKilled');destroyBld(t);}
     else if(t.kind==='keep'){t.dead=true;fx('boom',t.x,t.y);fx('text',t.x,t.y-30,FACTIONS[S.fac[t.side]].name+' kalesi düştü');checkOver();}
   }
 }
@@ -384,12 +410,13 @@ function gainXp(u,amt){
   if(u.lvl>=5||u.temp)return;u.xp+=amt;const tbl=u.type==='hero'?XP_HERO:XP_UNIT;
   while(u.lvl<5&&u.xp>=tbl[u.lvl]){
     u.lvl++;const base=u.maxHp/(1+LVL_HP*(u.lvl-2));const inc=base*LVL_HP;u.maxHp+=inc;u.hp=Math.min(u.maxHp,u.hp+inc+u.maxHp*0.2);
-    fx('levelup',u.x,u.y,u.lvl);fx('text',u.x,u.y-16,'Seviye '+u.lvl);
+    fx('levelup',u.x,u.y,u.lvl);fx('text',u.x,u.y-16,'Seviye '+u.lvl);if(u.type==='hero'&&u.side==='p'){statInc('x',0);S.stats.heroLvl[u.hero]=u.lvl;}
     if(u.side==='p'&&!S.sim)S.msg={t:S.t,txt:(u.type==='hero'?u.d.name:u.d.name+' taburu')+' '+u.lvl+'. seviyeye ulaştı: +%'+Math.round(LVL_DMG*100)+' saldırı, +%'+Math.round(LVL_HP*100)+' can'};
   }
 }
 function killUnit(u,src){
   u.dead=true;fx('die',u.x,u.y,u.side);
+  if(u.side==='p'&&!u.temp)statInc('lost');if(src&&src.side==='p'&&u.side!=='p')statInc('kills');
   if(src&&src.kind==='unit'&&!src.dead&&u.side!=='n')gainXp(src,u.type==='hero'?60:25);
   ui.sel.delete(u.id);
   if(u.side==='n'&&u.camp&&!u.camp.cleared&&u.camp.units.every(g=>g.dead)){
@@ -514,7 +541,7 @@ function tick(dt){
   S.t+=dt;
   if(!S.tide&&S.t>=540){S.tide=true;fx('text',W/2,300,'GELGİT: gelirler ikiye katlandı');}
   for(const s of S.players){
-    S.gold[s]+=income(s)*dt*(TEAM[s]===1?aiCfg(s).inc:1)*(S.tide?2:1);
+    const inc0=income(s)*dt*(TEAM[s]===1?aiCfg(s).inc:1)*(S.tide?2:1);S.gold[s]+=inc0;if(s==='p')statInc('gold',inc0);
     const ht=S.heroT[s];for(const k in ht){if(ht[k]>0){ht[k]-=dt;if(ht[k]<=0){ht[k]=0;spawnHero(s,k);}}}
   }
   for(const b of S.buildings){
@@ -526,6 +553,7 @@ function tick(dt){
         const g=S.gate[b.side];
         const nu=spawnUnit(b.side,b.q.type,g.x+rnd(-14,14),g.y+rnd(-8,8));
         const rp=S.rally[b.side];if(rp)nu.order={kind:'move',x:rp.x+rnd(-10,10),y:rp.y+rnd(-10,10)};
+        if(b.side==='p'){sfx('ready');statInc('trained');}
         b.q=null;
       }
     }
@@ -551,7 +579,7 @@ function tick(dt){
     for(const tm of [0,1]){const oth=1-tm;
       if(cnt[tm].length&&!cnt[oth].length&&(o.owner==null||TEAM[o.owner]!==tm)){
         o.owner=cnt[tm][0];const inc=FACTIONS[S.fac[o.owner]].outpost;
-        if(o.owner==='p'){fx('text',o.x,o.y-30,'Karakol alındı · +'+inc+' altın/sn');if(!S.sim)S.msg={t:S.t,txt:'Karakol alındı: gelir +'+inc+' altın/sn ('+S.outposts.filter(q=>q.owner==='p').length+'/'+S.outposts.length+')'};}
+        if(o.owner==='p'){sfx('coin');fx('text',o.x,o.y-30,'Karakol alındı · +'+inc+' altın/sn');if(!S.sim)S.msg={t:S.t,txt:'Karakol alındı: gelir +'+inc+' altın/sn ('+S.outposts.filter(q=>q.owner==='p').length+'/'+S.outposts.length+')'};}
         else if(tm===0)fx('text',o.x,o.y-30,'Müttefik karakolu aldı');
         else{fx('text',o.x,o.y-30,'Karakol düştü');if(!S.sim)S.msg={t:S.t,txt:'Karakol düştü: rakip gelir kazanıyor'};}
       }
@@ -663,6 +691,8 @@ function ai(side,dt){
 window.__gk={
   F:FACTIONS,
   spawn(side,type,x,y){return spawnUnit(side,type,x,y);},
+  end(w){S.over=w||'win';showEnd();},
+  get set(){return SET;},
   hero(side,key){return spawnHero(side,key);},
   build(i,t){S.gold.p+=1000;return build('p',i,t);},
   fast(sec){for(let t=0;t<sec;t+=0.05)tick(0.05);return S.t;},
@@ -671,6 +701,97 @@ window.__gk={
     const r={diff,mode:S.mode,fp:S.fac.p,fe:S.fac.e,winner:S.over||'none',t:+t.toFixed(0),tide:S.tide,keepP:Math.round(S.keeps.p.hp),keepE:Math.round(S.keeps.e.hp),unitsP:S.units.filter(u=>u.side==='p').length,unitsE:S.units.filter(u=>u.side==='e').length,heroesP:heroes('p').map(h=>h.hero).join(','),heroesE:heroes('e').map(h=>h.hero).join(','),hc:JSON.stringify(S.heroCount||{})};
     diff=pd;facP=pf;facE=pe;mode=pm;S=keep;rebuildChips();renderActions();return r;}
 };
+
+/* ---------- settings ---------- */
+const SET={sfx:true,music:true,vib:true,gfx:'high',tut:true};
+try{const j=JSON.parse(localStorage.getItem('gk-set')||'{}');Object.assign(SET,j);}catch(e){}
+function saveSet(){try{localStorage.setItem('gk-set',JSON.stringify(SET));}catch(e){}}
+/* ---------- audio (procedural, WebAudio) ---------- */
+const AUDIO={ctx:null,last:{}};
+const SFX_GAP={slash:90,arrow:120,die:150,boom:200,tap:40,order:80,alarm:8000,ability:200,coin:300,ready:400,build:200};
+function audioInit(){
+  if(AUDIO.ctx)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
+  const c=AUDIO.ctx=new C();AUDIO.master=c.createGain();AUDIO.master.gain.value=0.6;AUDIO.master.connect(c.destination);
+  AUDIO.sfx=c.createGain();AUDIO.sfx.connect(AUDIO.master);AUDIO.mus=c.createGain();AUDIO.mus.gain.value=SET.music?0.16:0;AUDIO.mus.connect(AUDIO.master);
+  startMusic();
+}
+window.addEventListener('pointerdown',()=>{audioInit();if(AUDIO.ctx&&AUDIO.ctx.state==='suspended')AUDIO.ctx.resume();},{capture:true});
+let _nb=null;function noiseBuf(){if(_nb)return _nb;const c=AUDIO.ctx;const b=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;_nb=b;return b;}
+function tone(f,dur,type,vol,to,delay){
+  const c=AUDIO.ctx;if(!c)return;const t=c.currentTime+(delay||0);const o=c.createOscillator(),g=c.createGain();
+  o.type=type||'sine';o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);
+  g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol||0.2,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  o.connect(g);g.connect(AUDIO.sfx);o.start(t);o.stop(t+dur+0.03);
+}
+function noise(dur,vol,fc,q,delay){
+  const c=AUDIO.ctx;if(!c)return;const t=c.currentTime+(delay||0);const n=c.createBufferSource();n.buffer=noiseBuf();
+  const f=c.createBiquadFilter();f.type='bandpass';f.frequency.value=fc||1800;f.Q.value=q||0.8;
+  const g=c.createGain();g.gain.setValueAtTime(vol||0.3,t);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+  n.connect(f);f.connect(g);g.connect(AUDIO.sfx);n.start(t);n.stop(t+dur+0.02);
+}
+function sfx(key,v){
+  if(!AUDIO.ctx||!SET.sfx||(S&&S.sim))return;v=v==null?1:v;if(v<=0.02)return;
+  const now=performance.now();const gap=SFX_GAP[key]||0;if(AUDIO.last[key]&&now-AUDIO.last[key]<gap)return;AUDIO.last[key]=now;
+  switch(key){
+    case 'tap':tone(880,0.05,'square',0.05*v);break;
+    case 'order':noise(0.12,0.12*v,2600,1.2);tone(520,0.09,'triangle',0.07*v,820);break;
+    case 'build':noise(0.07,0.3*v,900,1.5);tone(200,0.12,'square',0.1*v);noise(0.07,0.25*v,1100,1.5,0.14);break;
+    case 'ready':tone(330,0.3,'sawtooth',0.09*v);tone(440,0.35,'sawtooth',0.08*v,null,0.12);break;
+    case 'slash':noise(0.07,0.22*v,3200,1.6);tone(170,0.05,'square',0.06*v);break;
+    case 'arrow':noise(0.16,0.1*v,5200,2.2);break;
+    case 'die':noise(0.22,0.28*v,320,0.9);tone(90,0.2,'sine',0.12*v,50);break;
+    case 'boom':tone(80,0.5,'sine',0.35*v,28);noise(0.4,0.35*v,420,0.6);break;
+    case 'ability':tone(220,0.6,'sawtooth',0.16*v,48);noise(0.45,0.25*v,1300,0.7);break;
+    case 'levelup':[523,659,784,1046].forEach((f,i)=>tone(f,0.28,'triangle',0.14*v,null,i*0.09));break;
+    case 'hero':[392,523,659].forEach((f,i)=>tone(f,0.4,'sawtooth',0.1*v,null,i*0.16));break;
+    case 'coin':tone(1200,0.1,'triangle',0.12*v);tone(1600,0.16,'triangle',0.1*v,null,0.09);break;
+    case 'alarm':[0,0.3,0.6].forEach(d=>{tone(660,0.25,'square',0.08*v,null,d);tone(494,0.25,'square',0.08*v,null,d+0.15);});break;
+    case 'win':[523,659,784,1046,1318].forEach((f,i)=>tone(f,0.6,'triangle',0.16*v,null,i*0.18));break;
+    case 'lose':[440,392,349,294].forEach((f,i)=>tone(f,0.8,'sawtooth',0.12*v,null,i*0.32));break;
+  }
+}
+function volAt(x,y){if(!S)return 1;const t=camBase.clone().add(camPan);const d=Math.hypot(x-t.x,y-t.z);return Math.max(0,Math.min(1,1.15-d/420));}
+/* ambient music: slow minor-mode arpeggio with a feedback delay */
+const MUS={timer:null,step:0};
+const SCALE=[146.83,174.61,196,220,261.63,293.66,349.23,392,440,523.25];
+function startMusic(){
+  if(MUS.timer||!AUDIO.ctx)return;const c=AUDIO.ctx;
+  const dl=c.createDelay(1.0);dl.delayTime.value=0.42;const fb=c.createGain();fb.gain.value=0.38;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;
+  dl.connect(fb);fb.connect(lp);lp.connect(dl);dl.connect(AUDIO.mus);MUS.bus=c.createGain();MUS.bus.connect(AUDIO.mus);MUS.bus.connect(dl);
+  const drone=c.createOscillator();drone.type='sawtooth';drone.frequency.value=73.42;const df=c.createBiquadFilter();df.type='lowpass';df.frequency.value=260;const dg=c.createGain();dg.gain.value=0.07;drone.connect(df);df.connect(dg);dg.connect(AUDIO.mus);drone.start();
+  const drone2=c.createOscillator();drone2.type='sine';drone2.frequency.value=110.3;const dg2=c.createGain();dg2.gain.value=0.05;drone2.connect(dg2);dg2.connect(AUDIO.mus);drone2.start();
+  MUS.timer=setInterval(()=>{
+    if(!SET.music||!S||!S.running)return;
+    const fighting=S.units.some(u=>u.side==='p'&&u.target);MUS.step++;
+    if(MUS.step%(fighting?1:2))return;
+    const t=c.currentTime;const n=SCALE[Math.floor(Math.random()*SCALE.length)];
+    const o=c.createOscillator(),g=c.createGain();o.type=fighting?'sawtooth':'triangle';o.frequency.value=n;
+    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(fighting?0.11:0.08,t+0.05);g.gain.exponentialRampToValueAtTime(0.0001,t+(fighting?0.7:1.6));
+    o.connect(g);g.connect(MUS.bus);o.start(t);o.stop(t+1.8);
+  },700);
+}
+function applySettings(){
+  if(AUDIO.mus)AUDIO.mus.gain.value=SET.music?0.16:0;
+  renderer.setPixelRatio(SET.gfx==='low'?1:Math.min(window.devicePixelRatio||1,2));
+  for(const b of document.querySelectorAll('#settings .srow')){const k=b.dataset.k;b.querySelector('b').textContent=k==='gfx'?(SET.gfx==='low'?'Düşük':'Yüksek'):(SET[k]?'Açık':'Kapalı');}
+}
+/* ---------- match stats ---------- */
+function statInc(k,n){if(!S||S.sim)return;S.stats=S.stats||{trained:0,kills:0,lost:0,bldKilled:0,bldLost:0,gold:0,heroLvl:{}};S.stats[k]=(S.stats[k]||0)+(n==null?1:n);}
+/* ---------- tutorial (first 1v1) ---------- */
+const TUT=[
+  {txt:'1/6 · Kalendeki boş kareye dokun ve Çiftlik kur (100 altın).',done:()=>S.buildings.some(b=>b.side==='p'&&b.type==='farm')},
+  {txt:'2/6 · Başka bir kareye Kışla kur (150 altın).',done:()=>S.buildings.some(b=>b.side==='p'&&b.type==='barracks')},
+  {txt:'3/6 · Kışlaya dokun, tabur bas. Haritada bir yere dokunarak toplanma noktası ver.',done:()=>S.units.some(u=>u.side==='p'&&u.type!=='hero')},
+  {txt:'4/6 · Alttaki çipe dokunup taburu seç, ortadaki karakola dokun: gelir artar.',done:()=>S.outposts.some(o=>o.owner==='p')},
+  {txt:'5/6 · Altının yetince kaleye dokun, bir kahraman çağır. Yeteneği alt panelde.',done:()=>heroes('p').length>0},
+  {txt:'6/6 · 4 tabur olunca Tümü → düşman kalesine dokun. Sıkışınca Geri Çek. Bol şans!',done:()=>S.units.filter(u=>u.side==='p'&&u.type!=='hero').length>=4}
+];
+function tutText(){
+  if(!SET.tut||S.sim||S.mode!=='1v1')return '';
+  if(S.tutStep==null)S.tutStep=0;
+  while(S.tutStep<TUT.length&&TUT[S.tutStep].done()){S.tutStep++;if(S.tutStep>=TUT.length){SET.tut=false;saveSet();applySettings();}}
+  return S.tutStep<TUT.length?TUT[S.tutStep].txt:'';
+}
 
 /* ---------- UI ---------- */
 const ui={sel:new Set(),mode:'none',slot:null,bld:null,power:null,chipEls:new Map()};
@@ -805,6 +926,7 @@ function refreshHeader(){
   else if(ui.sel.size)h=ui.sel.size+' birlik seçili · dokun/sürükle: yürü · düşmana: saldır · Geri Çek: kaleye dön';
   else if(ui.mode==='slot')h='Bina seç';
   else if(ui.mode==='keep')h='Kahraman çağır';
+  else if(tutText())h=tutText();
   else if(S.tide)h='Gelgit: gelirler ikiye katlandı';
   else if(S.t<25){const en=enemySides('p').map(s=>FACTIONS[S.fac[s]].name).join(', ');const al=S.players.filter(s=>TEAM[s]===0&&s!=='p').map(s=>FACTIONS[S.fac[s]].name).join(', ');h='Rakip: '+en+(al?' · Müttefik: '+al:'')+' · Kalendeki boş alana dokunarak başla';}
   hintEl.textContent=h;
@@ -1194,9 +1316,9 @@ function unitGroup(u){
   const g=new THREE.Group();const n=u.d.soldiers;const cols=u.type==='cav'?3:4,sp=u.type==='cav'?6:4.8;g.figs=[];g.base=[];
   const fac=facOf(u);
   if(u.type==='hero'){const f=heroMesh(u);g.add(f);g.figs.push(f);g.base.push([0,0]);}
-  else for(let i=0;i<n;i++){const c=i%cols,r=Math.floor(i/cols);const f=soldierMesh(fac,u.type,u.side);const bx=(c-(cols-1)/2)*sp,bz=(r-0.5)*sp;f.position.set(bx,0,bz);g.add(f);g.figs.push(f);g.base.push([bx,bz]);
+  else for(let i=0;i<n;i++){const c=i%cols,r=Math.floor(i/cols);if(SET.gfx==='low'&&i%2===1){g.figs.push(null);g.base.push([0,0]);continue;}const f=soldierMesh(fac,u.type,u.side);const bx=(c-(cols-1)/2)*sp,bz=(r-0.5)*sp;f.position.set(bx,0,bz);g.add(f);g.figs.push(f);g.base.push([bx,bz]);
     if(i===0&&u.side!=='n'&&!u.ghost)f.add(bannerFor(u.side));}
-  if(u.ghost)for(const f of g.figs)f.material=new THREE.MeshLambertMaterial({vertexColors:true,transparent:true,opacity:.6});
+  if(u.ghost)for(const f of g.figs)if(f)f.material=new THREE.MeshLambertMaterial({vertexColors:true,transparent:true,opacity:.6});
   const sh=new THREE.Mesh(GEO.shadow,basic(0x000000,.28));sh.rotation.x=-Math.PI/2;sh.position.y=0.12;const sw=u.type==='hero'?5:cols*sp*0.75,sd=u.type==='hero'?5:sp*2;sh.scale.set(sw,sd,1);g.add(sh);
   const ring=new THREE.Mesh(GEO.ring,basic(0xf3e6c6,.9));ring.rotation.x=-Math.PI/2;ring.position.y=0.3;ring.visible=false;g.add(ring);g.ring=ring;
   const bring=new THREE.Mesh(GEO.ringB,basic(0xd9a441,.8));bring.rotation.x=-Math.PI/2;bring.position.y=0.32;bring.visible=false;g.add(bring);g.bring=bring;
@@ -1216,7 +1338,7 @@ function syncUnits(){
     const fighting=!!(u.target&&dist(u,u.target)<=u.d.range+u.target.r+2);
     const n=alive(u);const ph=S.t*9;const cav=u.type==='cav';
     for(let i=0;i<g.figs.length;i++){
-      const f=g.figs[i];f.visible=i<n;if(!f.visible)continue;const b=g.base[i];
+      const f=g.figs[i];if(!f)continue;f.visible=i<n;if(!f.visible)continue;const b=g.base[i];
       if(moved){f.position.set(b[0],Math.abs(Math.sin(ph+i*1.3))*(cav?0.9:0.55),b[1]);f.rotation.z=Math.sin(ph+i*1.3)*0.06;f.rotation.x=0;}
       else if(fighting){f.position.set(b[0],0,b[1]-Math.max(0,Math.sin(ph*0.9+i*1.7))*1.2);f.rotation.x=-Math.max(0,Math.sin(ph*0.9+i*1.7))*0.18;f.rotation.z=0;}
       else{f.position.set(b[0],0,b[1]);f.rotation.z=0;f.rotation.x=0;}
@@ -1382,11 +1504,17 @@ function frame(ts){
   draw();
   requestAnimationFrame(frame);
 }
+const startHTML=$('#overlay').innerHTML;
+function startGame(){$('#overlay').hidden=true;S.running=true;S.started=true;paused=false;$('#btnPause').classList.remove('on');last=0;acc=0;chipDirty=-1;}
+function showMenu(){const ov=$('#overlay');ov.innerHTML=startHTML;bindStartMenu();syncPick();ov.hidden=false;S.running=false;S.started=false;paused=false;$('#btnPause').classList.remove('on');$('#settings').hidden=true;}
 function showEnd(){
-  const ov=$('#overlay');ov.hidden=false;
-  const win=S.over==='win';
-  ov.innerHTML='<div class="box"><h1>'+(win?'Zafer':'Kale Düştü')+'</h1><p class="res">'+(win?'Düşman kaleleri yıkıldı.':'Kalen ele geçirildi.')+' Süre: '+$('#hTime').textContent+' · '+S.mode+' · Zorluk: '+DIFF[diff].name+'</p><button id="btnAgain" type="button">TEKRAR</button></div>';
-  $('#btnAgain').addEventListener('click',()=>{ov.hidden=true;init();S.running=true;S.started=true;paused=false;$('#btnPause').classList.remove('on');last=0;chipDirty=-1;});
+  const ov=$('#overlay');ov.hidden=false;const win=S.over==='win';sfx(win?'win':'lose');
+  const st=S.stats||{};const hl=Object.entries(st.heroLvl||{}).map(([k,l])=>{const h=FACTIONS[S.fac.p].heroes.find(x=>x.key===k);return (h?h.name:k)+' '+ROMAN[l];}).join(', ');
+  const lvls=S.units.filter(u=>u.side==='p'&&u.type!=='hero').map(u=>u.lvl);const best=lvls.length?Math.max(...lvls):0;
+  const rows=[['Süre',$('#hTime').textContent],['Basılan tabur',st.trained||0],['Yok edilen tabur',st.kills||0],['Kaybedilen tabur',st.lost||0],['Yıkılan düşman binası',st.bldKilled||0],['Kaybedilen bina',st.bldLost||0],['Toplanan altın',Math.round(st.gold||0)],['En yüksek tabur seviyesi',best?ROMAN[best]:'—'],['Kahramanlar',hl||'—']];
+  ov.innerHTML='<div class="box"><h1>'+(win?'Zafer':'Kale Düştü')+'</h1><p class="res">'+(win?'Düşman kaleleri yıkıldı.':'Kalen ele geçirildi.')+' · '+S.mode+' · '+DIFF[diff].name+'</p><div class="stats">'+rows.map(r=>'<span>'+r[0]+'</span><span>'+r[1]+'</span>').join('')+'</div><div class="ebtns"><button id="btnAgain" type="button">TEKRAR</button><button id="btnToMenu" type="button">MENÜ</button></div></div>';
+  $('#btnAgain').addEventListener('click',()=>{init();startGame();});
+  $('#btnToMenu').addEventListener('click',()=>{init();showMenu();});
 }
 function syncPick(){
   for(const b of document.querySelectorAll('#diffRow button'))b.classList.toggle('on',b.dataset.d===diff);
@@ -1395,12 +1523,19 @@ function syncPick(){
   const md=$('#modeDesc');if(md)md.textContent=ma===1&&mb===1?'Teke tek':ma<mb?(ma+' kale '+mb+' kaleye karşı · sayıca azsın, Kolay zorluk önerilir'):ma>mb?(ma+' kale '+mb+' kaleye karşı · müttefiklerin var'):(ma+'v'+mb+' takım savaşı');
   const fd=$('#facDesc');if(fd){const F=FACTIONS[facP];fd.textContent=F.desc+' · Kahramanlar: '+F.heroes.map(h=>h.name).join(', ');}
 }
-for(const b of document.querySelectorAll('#diffRow button'))b.addEventListener('click',()=>{diff=b.dataset.d;try{localStorage.setItem('gk-diff',diff);}catch(e){}syncPick();});
-for(const b of document.querySelectorAll('#facRow button'))b.addEventListener('click',()=>{facP=b.dataset.f;try{localStorage.setItem('gk-fac',facP);}catch(e){}syncPick();init();});
-for(const b of document.querySelectorAll('#modeRow button'))b.addEventListener('click',()=>{const [ma,mb]=MODES[mode];mode=(b.dataset.a?+b.dataset.a:ma)+'v'+(b.dataset.b?+b.dataset.b:mb);try{localStorage.setItem('gk-mode',mode);}catch(e){}syncPick();init();});
-syncPick();
-$('#btnStart').addEventListener('click',()=>{$('#overlay').hidden=true;S.running=true;S.started=true;paused=false;$('#btnPause').classList.remove('on');});
+function bindStartMenu(){
+  for(const b of document.querySelectorAll('#diffRow button'))b.addEventListener('click',()=>{diff=b.dataset.d;try{localStorage.setItem('gk-diff',diff);}catch(e){}syncPick();});
+  for(const b of document.querySelectorAll('#facRow button'))b.addEventListener('click',()=>{facP=b.dataset.f;try{localStorage.setItem('gk-fac',facP);}catch(e){}syncPick();init();});
+  for(const b of document.querySelectorAll('#modeRow button'))b.addEventListener('click',()=>{const [ma,mb]=MODES[mode];mode=(b.dataset.a?+b.dataset.a:ma)+'v'+(b.dataset.b?+b.dataset.b:mb);try{localStorage.setItem('gk-mode',mode);}catch(e){}syncPick();init();});
+  $('#btnStart').addEventListener('click',()=>{startGame();});
+}
+bindStartMenu();syncPick();
 let paused=false;
+$('#btnSet').addEventListener('click',()=>{const sp=$('#settings');sp.hidden=!sp.hidden;applySettings();if(!sp.hidden&&S.started&&!S.over&&!paused){paused=true;S.running=false;$('#btnPause').classList.add('on');}});
+$('#btnSetClose').addEventListener('click',()=>{$('#settings').hidden=true;});
+$('#btnMenu').addEventListener('click',()=>{init();showMenu();});
+for(const b of document.querySelectorAll('#settings .srow'))b.addEventListener('click',()=>{const k=b.dataset.k;if(k==='gfx')SET.gfx=SET.gfx==='low'?'high':'low';else SET[k]=!SET[k];saveSet();applySettings();if(k==='gfx'){for(const [u,g] of unitMeshes){scene.remove(g);unitMeshes.delete(u);}}if(k==='sfx'&&SET.sfx)sfx('coin');});
+applySettings();
 $('#btnPause').addEventListener('click',()=>{if(!S.started||S.over)return;paused=!paused;S.running=!paused;$('#btnPause').classList.toggle('on',paused);last=0;acc=0;refreshHeader();});
 const ro=new ResizeObserver(resize);ro.observe($('#stage'));
 init();resize();
