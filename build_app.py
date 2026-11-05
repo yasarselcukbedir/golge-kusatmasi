@@ -53,7 +53,11 @@ head='''<!doctype html>
 '''
 tail='''
 <script>
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js?v=%s').catch(()=>{});});}
+if('serviceWorker' in navigator){
+  let reloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded)return;reloaded=true;if(performance.now()<15000)location.reload();else{const b=document.createElement('button');b.textContent='Yeni sürüm hazır · dokun, yenile';b.style.cssText='position:fixed;left:50%%;top:12px;transform:translateX(-50%%);z-index:99;background:#3a2c12;color:#d9a441;border:1px solid #d9a441;border-radius:10px;padding:8px 14px;font:600 13px -apple-system,sans-serif';b.onclick=()=>location.reload();document.body.appendChild(b);}});
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js?v=%s').then(r=>{r.update().catch(()=>{});}).catch(()=>{});});
+}
 </script>
 </body>
 </html>
@@ -86,6 +90,11 @@ self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.
 self.addEventListener('fetch',e=>{
   const u=e.request.url;
   if(e.request.method!=='GET')return;
+  const isPage=e.request.mode==='navigate'||u.endsWith('/index.html')||u.endsWith('/golge-kusatmasi/');
+  if(isPage){
+    e.respondWith(Promise.race([fetch(e.request).then(res=>{if(res&&res.ok){const cp=res.clone();caches.open(CACHE).then(c=>c.put('./index.html',cp));}return res;}),new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),3500))]).catch(()=>caches.match('./index.html')));
+    return;
+  }
   e.respondWith(caches.match(e.request,{ignoreSearch:true}).then(r=>r||fetch(e.request).then(res=>{
     if(res&&(res.ok||res.type==='opaque')&&(u.includes('fonts.g')||u.includes('cdnjs')||u.startsWith(self.location.origin))){const cp=res.clone();caches.open(CACHE).then(c=>c.put(e.request,cp));}
     return res;}).catch(()=>caches.match('./index.html'))));

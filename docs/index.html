@@ -730,7 +730,14 @@ function audioInit(){
   AUDIO.sfx=c.createGain();AUDIO.sfx.connect(AUDIO.master);AUDIO.mus=c.createGain();AUDIO.mus.gain.value=SET.music?0.16:0;AUDIO.mus.connect(AUDIO.master);
   startMusic();
 }
-window.addEventListener('pointerdown',()=>{audioInit();if(AUDIO.ctx&&AUDIO.ctx.state==='suspended')AUDIO.ctx.resume();},{capture:true});
+window.addEventListener('pointerdown',()=>{audioInit();if(AUDIO.ctx&&AUDIO.ctx.state==='suspended')AUDIO.ctx.resume();unlockIOS();},{capture:true});
+let _unlocked=false;
+function unlockIOS(){
+  if(_unlocked)return;_unlocked=true;
+  try{const a=document.createElement('audio');a.setAttribute('playsinline','');a.loop=true;a.volume=0.01;
+    a.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=';
+    const pr=a.play();if(pr&&pr.catch)pr.catch(()=>{});AUDIO.silent=a;}catch(e){}
+}
 let _nb=null;function noiseBuf(){if(_nb)return _nb;const c=AUDIO.ctx;const b=c.createBuffer(1,c.sampleRate,c.sampleRate);const d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;_nb=b;return b;}
 function tone(f,dur,type,vol,to,delay){
   const c=AUDIO.ctx;if(!c)return;const t=c.currentTime+(delay||0);const o=c.createOscillator(),g=c.createGain();
@@ -1559,7 +1566,11 @@ requestAnimationFrame(frame);
 </script>
 
 <script>
-if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js?v=4d358000').catch(()=>{});});}
+if('serviceWorker' in navigator){
+  let reloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded)return;reloaded=true;if(performance.now()<15000)location.reload();else{const b=document.createElement('button');b.textContent='Yeni sürüm hazır · dokun, yenile';b.style.cssText='position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:99;background:#3a2c12;color:#d9a441;border:1px solid #d9a441;border-radius:10px;padding:8px 14px;font:600 13px -apple-system,sans-serif';b.onclick=()=>location.reload();document.body.appendChild(b);}});
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js?v=95c64061').then(r=>{r.update().catch(()=>{});}).catch(()=>{});});
+}
 </script>
 </body>
 </html>
