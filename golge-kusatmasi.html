@@ -547,7 +547,7 @@ function tick(dt){
   }
   for(const b of S.buildings){
     if(b.dead)continue;
-    if(b.prog<1){b.prog=Math.min(1,b.prog+dt/BT[b.type].time);continue;}
+    if(b.prog<1){b.prog=Math.min(1,b.prog+dt/BT[b.type].time);b.knockT=(b.knockT||0.9)-dt;if(b.knockT<=0){b.knockT=1.1+Math.random()*0.5;if(AUDIO.ctx&&SET.sfx&&!S.sim&&gapOk('knock',450))buildSfx(volAt(b.x,b.y)*0.7,2);}continue;}
     if(b.q){
       b.q.t+=dt;
       if(b.q.t>=b.q.total){
@@ -744,7 +744,7 @@ function sfx(key,v){
   switch(key){
     case 'tap':tone(300,0.045,'sine',0.05*v,200);noise(0.02,0.025*v,1500,1);break;
     case 'order':noise(0.1,0.07*v,1800,1.1);tone(260,0.08,'sine',0.05*v,340);break;
-    case 'build':noise(0.07,0.3*v,900,1.5);tone(200,0.12,'square',0.1*v);noise(0.07,0.25*v,1100,1.5,0.14);break;
+    case 'build':buildSfx(v,4);break;
     case 'ready':tone(330,0.3,'sawtooth',0.09*v);tone(440,0.35,'sawtooth',0.08*v,null,0.12);break;
     case 'slash':noise(0.07,0.22*v,3200,1.6);tone(170,0.05,'square',0.06*v);break;
     case 'arrow':noise(0.16,0.1*v,5200,2.2);break;
@@ -769,6 +769,16 @@ const VOICE={
   gob:{ring:1500,rt:'sawtooth',thud:420,cry:[700,1150,'sawtooth'],hoof:'dirt',q:5},
   ghost:{ring:2600,rt:'sine',thud:200,cry:[200,320,'sine'],hoof:'light'}
 };
+function knock(v,delay,pitch){
+  const c=AUDIO.ctx;if(!c)return;pitch=pitch||1;
+  noise(0.05,0.22*v,650*pitch,1.4,delay);               /* dull wooden body */
+  tone(150*pitch,0.09,'sine',0.14*v,70*pitch,delay);    /* low thump */
+  noise(0.02,0.08*v,2400*pitch,3,delay+0.004);          /* short stone tick */
+}
+function buildSfx(v,n){
+  v=v==null?1:v;n=n||4;let d=0;
+  for(let i=0;i<n;i++){knock(v*(0.8+Math.random()*0.3),d,0.9+Math.random()*0.25);d+=0.22+Math.random()*0.12;}
+}
 function gapOk(key,ms){const now=performance.now();if(AUDIO.last[key]&&now-AUDIO.last[key]<ms)return false;AUDIO.last[key]=now;return true;}
 function combatSfx(u){
   if(!AUDIO.ctx||!SET.sfx||S.sim)return;const fac=facOf(u),V=VOICE[fac]||VOICE.insan;const v=volAt(u.x,u.y);if(v<0.03)return;
