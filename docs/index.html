@@ -729,7 +729,7 @@ const SFX_GAP={slash:90,arrow:120,die:150,boom:200,tap:40,order:80,alarm:8000,ab
 function audioInit(){
   if(AUDIO.ctx)return;const C=window.AudioContext||window.webkitAudioContext;if(!C)return;
   const c=AUDIO.ctx=new C();AUDIO.master=c.createGain();AUDIO.master.gain.value=0.6;AUDIO.master.connect(c.destination);
-  AUDIO.sfx=c.createGain();AUDIO.sfx.connect(AUDIO.master);AUDIO.mus=c.createGain();AUDIO.mus.gain.value=SET.music?0.16:0;AUDIO.mus.connect(AUDIO.master);
+  AUDIO.sfx=c.createGain();AUDIO.sfx.connect(AUDIO.master);AUDIO.mus=c.createGain();AUDIO.mus.gain.value=SET.music?0.14:0;AUDIO.mus.connect(AUDIO.master);
   startMusic();
 }
 window.addEventListener('pointerdown',()=>{audioInit();if(AUDIO.ctx&&AUDIO.ctx.state==='suspended')AUDIO.ctx.resume();unlockIOS();},{capture:true});
@@ -757,8 +757,8 @@ function sfx(key,v){
   if(!AUDIO.ctx||!SET.sfx||(S&&S.sim))return;v=v==null?1:v;if(v<=0.02)return;
   const now=performance.now();const gap=SFX_GAP[key]||0;if(AUDIO.last[key]&&now-AUDIO.last[key]<gap)return;AUDIO.last[key]=now;
   switch(key){
-    case 'tap':tone(880,0.05,'square',0.05*v);break;
-    case 'order':noise(0.12,0.12*v,2600,1.2);tone(520,0.09,'triangle',0.07*v,820);break;
+    case 'tap':tone(300,0.045,'sine',0.05*v,200);noise(0.02,0.025*v,1500,1);break;
+    case 'order':noise(0.1,0.07*v,1800,1.1);tone(260,0.08,'sine',0.05*v,340);break;
     case 'build':noise(0.07,0.3*v,900,1.5);tone(200,0.12,'square',0.1*v);noise(0.07,0.25*v,1100,1.5,0.14);break;
     case 'ready':tone(330,0.3,'sawtooth',0.09*v);tone(440,0.35,'sawtooth',0.08*v,null,0.12);break;
     case 'slash':noise(0.07,0.22*v,3200,1.6);tone(170,0.05,'square',0.06*v);break;
@@ -815,27 +815,38 @@ function crySfx(u){
   const [f0,f1,ty]=V.cry;tone(f0,0.38,ty,0.11*v,f1);tone(f0*1.5,0.3,ty,0.05*v,f1*1.5,0.04);noise(0.32,0.05*v,1100,0.9);
 }
 function volAt(x,y){if(!S)return 1;const t=camBase.clone().add(camPan);const d=Math.hypot(x-t.x,y-t.z);return Math.max(0,Math.min(1,1.15-d/420));}
-/* ambient music: slow minor-mode arpeggio with a feedback delay */
-const MUS={timer:null,step:0};
-const SCALE=[146.83,174.61,196,220,261.63,293.66,349.23,392,440,523.25];
+/* music: a slow written piece in D minor — pad chords, bass, sparse melody; a soft heartbeat joins in battle */
+const MUS={timer:null,beat:0,next:0};
+const N={D3:146.83,E3:164.81,F3:174.61,G3:196,A3:220,Bb3:233.08,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392,A4:440,Bb4:466.16,C5:523.25,D5:587.33,Bb2:116.54,C3:130.81,A2:110,F2:87.31,D2:73.42,G2:98};
+const CHORDS=[['D3','F3','A3','D2'],['Bb2','D3','F3','Bb2'],['F3','A3','C4','F2'],['C3','E3','G3','C3'],['D3','F3','A3','D2'],['G2','Bb3','D4','G2'],['A2','C4','E4','A2'],['D3','F3','A3','D2']];
+const MELODY=['A4',0,0,'F4',0,'D4',0,0, 'F4',0,'G4',0,'A4',0,0,0, 'C5',0,0,'A4',0,'F4',0,0, 'G4',0,'E4',0,'D4',0,0,0, 'A4',0,'Bb4',0,'A4',0,'F4',0, 'D4',0,0,0,'F4',0,'G4',0, 'E4',0,0,'C4',0,'E4',0,0, 'D4',0,0,0,0,0,0,0];
+function padVoice(c,f,t0,dur,vol,bus){
+  const g=c.createGain();g.gain.setValueAtTime(0.0001,t0);g.gain.exponentialRampToValueAtTime(vol,t0+1.4);g.gain.setValueAtTime(vol,t0+dur-1.6);g.gain.exponentialRampToValueAtTime(0.0001,t0+dur);
+  for(const [type,det] of [['triangle',-4],['sine',4]]){const o=c.createOscillator();o.type=type;o.frequency.value=f;o.detune.value=det;o.connect(g);o.start(t0);o.stop(t0+dur+0.05);}
+  g.connect(bus);
+}
 function startMusic(){
   if(MUS.timer||!AUDIO.ctx)return;const c=AUDIO.ctx;
-  const dl=c.createDelay(1.0);dl.delayTime.value=0.42;const fb=c.createGain();fb.gain.value=0.38;const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=1400;
-  dl.connect(fb);fb.connect(lp);lp.connect(dl);dl.connect(AUDIO.mus);MUS.bus=c.createGain();MUS.bus.connect(AUDIO.mus);MUS.bus.connect(dl);
-  const drone=c.createOscillator();drone.type='sawtooth';drone.frequency.value=73.42;const df=c.createBiquadFilter();df.type='lowpass';df.frequency.value=260;const dg=c.createGain();dg.gain.value=0.07;drone.connect(df);df.connect(dg);dg.connect(AUDIO.mus);drone.start();
-  const drone2=c.createOscillator();drone2.type='sine';drone2.frequency.value=110.3;const dg2=c.createGain();dg2.gain.value=0.05;drone2.connect(dg2);dg2.connect(AUDIO.mus);drone2.start();
+  const lp=c.createBiquadFilter();lp.type='lowpass';lp.frequency.value=850;lp.Q.value=0.4;lp.connect(AUDIO.mus);MUS.pad=lp;
+  const dl=c.createDelay(1.5);dl.delayTime.value=0.5;const fb=c.createGain();fb.gain.value=0.3;const dlp=c.createBiquadFilter();dlp.type='lowpass';dlp.frequency.value=1600;
+  dl.connect(fb);fb.connect(dlp);dlp.connect(dl);dl.connect(AUDIO.mus);MUS.mel=c.createGain();MUS.mel.connect(AUDIO.mus);MUS.mel.connect(dl);
+  MUS.bass=c.createGain();MUS.bass.connect(AUDIO.mus);MUS.drum=c.createGain();MUS.drum.connect(AUDIO.mus);
+  const BEAT=0.95;MUS.next=c.currentTime+0.3;MUS.beat=0;
   MUS.timer=setInterval(()=>{
-    if(!SET.music||!S||!S.running)return;
-    const fighting=S.units.some(u=>u.side==='p'&&u.target);MUS.step++;
-    if(MUS.step%(fighting?1:2))return;
-    const t=c.currentTime;const n=SCALE[Math.floor(Math.random()*SCALE.length)];
-    const o=c.createOscillator(),g=c.createGain();o.type=fighting?'sawtooth':'triangle';o.frequency.value=n;
-    g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(fighting?0.11:0.08,t+0.05);g.gain.exponentialRampToValueAtTime(0.0001,t+(fighting?0.7:1.6));
-    o.connect(g);g.connect(MUS.bus);o.start(t);o.stop(t+1.8);
-  },700);
+    if(!SET.music)return;const c=AUDIO.ctx;
+    while(MUS.next<c.currentTime+0.6){
+      const t=MUS.next,b=MUS.beat;const bar=Math.floor(b/8)%CHORDS.length;const fighting=S&&S.running&&S.units.some(u=>u.side==='p'&&u.target);
+      if(b%8===0){const ch=CHORDS[bar];for(let i=0;i<3;i++)padVoice(c,N[ch[i]],t,BEAT*8+0.6,0.035,MUS.pad);
+        const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=N[ch[3]];g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.09,t+0.15);g.gain.exponentialRampToValueAtTime(0.0001,t+BEAT*7.5);o.connect(g);g.connect(MUS.bass);o.start(t);o.stop(t+BEAT*8);}
+      const m=MELODY[b%MELODY.length];
+      if(m){const o=c.createOscillator(),g=c.createGain();o.type='triangle';o.frequency.value=N[m];g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.06,t+0.25);g.gain.exponentialRampToValueAtTime(0.0001,t+2.2);o.connect(g);g.connect(MUS.mel);o.start(t);o.stop(t+2.4);}
+      if(fighting&&b%2===0){for(const d of [0,0.2]){const o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.setValueAtTime(58,t+d);o.frequency.exponentialRampToValueAtTime(34,t+d+0.25);g.gain.setValueAtTime(0.0001,t+d);g.gain.exponentialRampToValueAtTime(d?0.09:0.13,t+d+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+d+0.3);o.connect(g);g.connect(MUS.drum);o.start(t+d);o.stop(t+d+0.35);}}
+      MUS.next+=BEAT;MUS.beat++;
+    }
+  },200);
 }
 function applySettings(){
-  if(AUDIO.mus)AUDIO.mus.gain.value=SET.music?0.16:0;
+  if(AUDIO.mus)AUDIO.mus.gain.value=SET.music?0.14:0;
   renderer.setPixelRatio(SET.gfx==='low'?1:Math.min(window.devicePixelRatio||1,2));
   for(const b of document.querySelectorAll('#settings .srow')){const k=b.dataset.k;b.querySelector('b').textContent=k==='gfx'?(SET.gfx==='low'?'Düşük':'Yüksek'):(SET[k]?'Açık':'Kapalı');}
 }
@@ -1611,7 +1622,7 @@ requestAnimationFrame(frame);
 if('serviceWorker' in navigator){
   let reloaded=false;
   navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded)return;reloaded=true;if(performance.now()<15000)location.reload();else{const b=document.createElement('button');b.textContent='Yeni sürüm hazır · dokun, yenile';b.style.cssText='position:fixed;left:50%;top:12px;transform:translateX(-50%);z-index:99;background:#3a2c12;color:#d9a441;border:1px solid #d9a441;border-radius:10px;padding:8px 14px;font:600 13px -apple-system,sans-serif';b.onclick=()=>location.reload();document.body.appendChild(b);}});
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js?v=db40d1e8').then(r=>{r.update().catch(()=>{});}).catch(()=>{});});
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js?v=3c9462ed').then(r=>{r.update().catch(()=>{});}).catch(()=>{});});
 }
 </script>
 </body>
