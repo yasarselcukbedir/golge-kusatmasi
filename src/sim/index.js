@@ -349,7 +349,7 @@ function aiTurn(match,p){const s=match.state;if(s.time<p.aiState.next||!entity(s
  const post=s.outposts.filter(o=>o.owner==null||s.players[o.owner].team!==p.team).sort((a,b)=>distance(a,p.home)-distance(b,p.home))[0];
  const scout=army.find(e=>e.kind==='unit'&&e.role!=='siege'&&e.hp>e.maxHp*.6);
  const camp=s.camps.find(c=>!c.cleared&&distance(c,p.home)<distance(keep,p.home));
- const attack=army.length>=diff.attackSize||s.time>210;
+ const attack=army.length>=diff.attackSize||s.time>(diff.attackAt??210);
  p.aiState.phase=threats.length?'defend':attack?'attack':'expand';
  for(const e of army){
   if(e.hp<e.maxHp*diff.retreat){cmd({type:'retreat',ids:[e.id]});continue;}

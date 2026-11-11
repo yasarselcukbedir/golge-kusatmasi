@@ -1,9 +1,12 @@
 // Content is plain JSON-compatible data shared by the simulation and client.
 export const RULES = Object.freeze({dt:0.5, formationSpacing:16, allySeparation:14, enemySeparation:8, separationPasses:3, startingGold:650, baseIncome:3, outpostIncome:2, captureSeconds:10, campGold:180, campXp:90, population:18, queueLimit:5, maxLevel:5, xpPerLevel:100, levelHp:0.12, levelDamage:0.12, counter:3.5, buildingResistance:0.22, siegeBonus:3.2, buildRadius:100, vision:95, grid:20, heroTime:24, maxEvents:256});
 export const DIFFICULTIES = [
- {id:'kolay',name:'Kolay',income:0.65,production:1.35,decision:7,attackSize:7,retreat:0.2},
- {id:'normal',name:'Normal',income:1,production:1,decision:4,attackSize:6,retreat:0.28},
- {id:'zor',name:'Zor',income:1.65,production:0.7,decision:2,attackSize:5,retreat:0.36}
+ // Ölçümle ayarlandı: telefonda oynayan yavaş bir oyuncuyu temsil eden vekil yapay zekâya karşı
+ // Kolay ~%90, Normal ~%60 (acemi) / ~%90 (ortalama), Zor ~%20 kazanma oranı. attackAt: ordusu
+ // küçük olsa bile yapay zekânın saldırıya geçtiği saniye.
+ {id:'kolay',name:'Kolay',income:0.6,production:1.4,decision:8,attackSize:8,retreat:0.2,attackAt:360},
+ {id:'normal',name:'Normal',income:0.85,production:1.12,decision:6.5,attackSize:7,retreat:0.28,attackAt:285},
+ {id:'zor',name:'Zor',income:1,production:0.95,decision:4,attackSize:6,retreat:0.34,attackAt:230}
 ];
 export const MODES = [1,2,3].flatMap(a=>[1,2,3].map(b=>`${a}v${b}`));
 const unitBase = {

@@ -276,7 +276,20 @@ export class Battlefield {
     if(!this.view)return null;let chosen=null,best=Infinity;
     for (const e of this.view.entities) {
       if (ownOnly&&e.player!==0) continue;
-      const p=this.project(e.x,e.y,e.kind==='building'?11:e.kind==='hero'?this.modelFor(e).bounds.max[1]*.45:4),radius=e.kind==='building'?Math.max(20,5200/this.distance):Math.max(17,3200/this.distance),d=Math.hypot(p.x-x,p.y-y);
+      if (e.kind==='building') {
+        // Buildings are picked by their whole on-screen silhouette (base to roof, full width),
+        // so a tap anywhere on the model selects it instead of sending the army there.
+        const bounds=this.modelFor(e).bounds.max,half=Math.max(bounds[0],bounds[2]),top=bounds[1];
+        const base=this.project(e.x,e.y,0),roof=this.project(e.x,e.y,top),side=this.project(e.x+half,e.y,top*.5),mid=this.project(e.x,e.y,top*.5);
+        if(base.z>=1)continue;
+        const pad=10,rx=Math.max(18,Math.abs(side.x-mid.x)+pad),y0=Math.min(roof.y,base.y)-pad,y1=Math.max(roof.y,base.y)+rx*.45+pad;
+        if(x<mid.x-rx||x>mid.x+rx||y<y0||y>y1)continue;
+        // Units standing in front keep priority: a building only wins when no unit is under the finger.
+        const score=1+Math.hypot((x-mid.x)/rx,(y-(y0+y1)/2)/((y1-y0)/2));
+        if(score<best){best=score;chosen=e;}
+        continue;
+      }
+      const p=this.project(e.x,e.y,e.kind==='hero'?this.modelFor(e).bounds.max[1]*.45:4),radius=Math.max(17,3200/this.distance),d=Math.hypot(p.x-x,p.y-y);
       if(p.z<1&&d<radius&&d/radius<best){best=d/radius;chosen=e;}
     }
     return chosen;
