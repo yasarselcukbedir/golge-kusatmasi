@@ -19,13 +19,16 @@ export class WorldFog {
       texture.unpackAlignment = 1;
       texture.flipY = false;
       texture.generateMipmaps = false;
-      texture.minFilter = T.NearestFilter;
-      texture.magFilter = T.NearestFilter;
+      // Bilinear sampling turns the coarse visibility grid into soft edges.
+      texture.minFilter = T.LinearFilter;
+      texture.magFilter = T.LinearFilter;
       texture.colorSpace = T.NoColorSpace;
       this.uniform.value = texture;
       previous?.dispose();
     } else {
-      previous.image.data.set(frame.data);
+      // Ease towards the new visibility so fog rolls back instead of popping per cell.
+      const data = previous.image.data, next = frame.data;
+      for (let i = 3; i < data.length; i += 4) { const d = next[i] - data[i]; data[i] = Math.abs(d) < 6 ? next[i] : data[i] + d * 0.42; }
     }
     this.uniform.value.needsUpdate = true;
     return this.uniform.value;

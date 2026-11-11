@@ -6,20 +6,32 @@ import {battalionLayout} from '../sim/index.js';
 
 const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
 export const PALETTES = {
-  catal: {ground:0x687951, light:0xa2a678, stone:0x8e9990, water:0x466f79, sky:0x1c3036},
-  havza: {ground:0x4e7462, light:0x8ca688, stone:0x8b9f98, water:0x385c70, sky:0x192e36},
-  teras: {ground:0x94704b, light:0xc5a876, stone:0xae9272, water:0x686b58, sky:0x332d2a},
-  ayna: {ground:0x667283, light:0xb1b3b0, stone:0x8a9da8, water:0x536c8c, sky:0x252a3d}
+  catal: {ground:0x4a7740, light:0x93b25e, dry:0xb9a865, path:0x9c8a63, stone:0x8e9990, water:0x3f7f8c, sky:0x1c3036, leaf:0x3f7a45},
+  havza: {ground:0x3c7155, light:0x86b488, dry:0x9fae7a, path:0x8f8a6c, stone:0x8b9f98, water:0x356a82, sky:0x192e36, leaf:0x2f6b52},
+  teras: {ground:0x96693f, light:0xd0aa72, dry:0xdcc08a, path:0xbd9a6e, stone:0xae9272, water:0x5f7f78, sky:0x332d2a, leaf:0x7f8a4c},
+  ayna: {ground:0x566c86, light:0xa9b6c2, dry:0xc5ccd2, path:0x8d93a0, stone:0x8a9da8, water:0x4a78a8, sky:0x252a3d, leaf:0x7d9fb2}
 };
 function random(seed) { let x = seed >>> 0; return () => { x = (Math.imul(1664525,x) + 1013904223) >>> 0; return x / 4294967296; }; }
 const color = n => new THREE.Color(n);
+// Smooth value noise for terrain colouring (cosmetic only).
+function makeNoise(seed) {
+  const r = random(seed), grid = new Float32Array(4096); for (let i=0;i<4096;i++) grid[i] = r();
+  const at = (x,y) => grid[(x&63)+(y&63)*64];
+  return (x,y) => { const xi=Math.floor(x),yi=Math.floor(y),fx=x-xi,fy=y-yi,u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy); return (at(xi,yi)*(1-u)+at(xi+1,yi)*u)*(1-v)+(at(xi,yi+1)*(1-u)+at(xi+1,yi+1)*u)*v; };
+}
+function detailTexture() {
+  const size=128,canvas=document.createElement('canvas');canvas.width=canvas.height=size;const c=canvas.getContext('2d'),r=random(4711);
+  c.fillStyle='#e9e9e9';c.fillRect(0,0,size,size);
+  for(let i=0;i<1500;i++){const v=r();c.fillStyle=v<.5?`rgba(0,0,0,${.05+r()*.13})`:`rgba(255,255,255,${.08+r()*.2})`;const w=1+r()*2.2;c.fillRect(r()*size,r()*size,w,w*(1+r()*1.6));}
+  const t=new THREE.CanvasTexture(canvas);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;return t;
+}
 
 export class Battlefield {
   constructor(canvas, catalog, quality) {
     this.canvas = canvas; this.catalog = catalog; this.quality = quality;
     this.renderer = new THREE.WebGLRenderer({canvas, antialias:quality !== 'dusuk', alpha:false, powerPreference:'high-performance'});
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.25;
+    this.renderer.toneMapping = THREE.ACESFilmicToneMapping; this.renderer.toneMappingExposure = 1.12;
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(43,1,0.5,1800);
     this.target = {x:90,y:210}; this.distance = 210;
@@ -34,8 +46,8 @@ export class Battlefield {
     this.shake = 0; this.fxColor = new THREE.Color(); this.fxQuat = new THREE.Quaternion(); this.fxDir = new THREE.Vector3(); this.axisX = new THREE.Vector3(1,0,0); this.axisZ = new THREE.Vector3(0,0,1); this.leanQ = new THREE.Quaternion(); this.factionHex = new Map();
     this.worldFog = new WorldFog(THREE);
     this.fogSize = new THREE.Vector2(640,420);
-    this.scene.add(new THREE.HemisphereLight(0xc8e0e0,0x4c5136,2.3));
-    this.sun = new THREE.DirectionalLight(0xffdfae,3.4); this.sun.position.set(-80,260,100); this.scene.add(this.sun);
+    this.scene.add(new THREE.HemisphereLight(0xd6e8ff,0x4f5a3a,1.5));
+    this.sun = new THREE.DirectionalLight(0xffe2b0,3.9); this.sun.position.set(-80,260,100); this.scene.add(this.sun);
     this.sun.shadow.mapSize.set(1024,1024); this.sun.shadow.camera.left = -310; this.sun.shadow.camera.right = 310;
     this.sun.shadow.camera.top = 260; this.sun.shadow.camera.bottom = -260; this.sun.shadow.camera.near = 10; this.sun.shadow.camera.far = 650;
     this.sun.shadow.normalBias = 1.2; this.sun.shadow.bias = -0.0001;
@@ -88,25 +100,32 @@ export class Battlefield {
       shader.fragmentShader = 'uniform sampler2D uFog; uniform vec2 uFogSize; varying vec2 vFogWorld;\n' + shader.fragmentShader;
       shader.fragmentShader = shader.fragmentShader.replace('#include <dithering_fragment>', `#include <dithering_fragment>
         vec2 fogUV = clamp(vec2(vFogWorld.x / uFogSize.x, vFogWorld.y / uFogSize.y), 0.0, 1.0);
-        gl_FragColor.rgb *= max(0.035, 1.0 - texture2D(uFog, fogUV).a);`);
+        float fogA = texture2D(uFog, fogUV).a;
+        float fogSeen = smoothstep(0.0, 1.0, clamp(fogA / 0.57, 0.0, 1.0));
+        float fogDark = smoothstep(0.0, 1.0, clamp((fogA - 0.57) / 0.39, 0.0, 1.0));
+        vec3 fogBase = gl_FragColor.rgb;
+        float fogLum = dot(fogBase, vec3(0.299, 0.587, 0.114));
+        vec3 fogRemembered = mix(vec3(fogLum), fogBase, 0.6) * 0.52 + vec3(0.012, 0.022, 0.03);
+        vec3 fogUnknown = vec3(0.022, 0.036, 0.046) + fogBase * 0.07;
+        gl_FragColor.rgb = mix(mix(fogBase, fogRemembered, fogSeen), fogUnknown, fogDark);`);
     };
-    m.customProgramCacheKey = () => 'gk-fog-rgba-v2'; this.materials.set(key,m); return m;
+    m.customProgramCacheKey = () => 'gk-fog-rgba-v3'; this.materials.set(key,m); return m;
   }
   mesh(parent, shape, material, x,y,z,sx,sy,sz,ry = 0) {
     const mesh = new THREE.Mesh(this.geo(shape),material); mesh.position.set(x,y,z); mesh.scale.set(sx,sy,sz); mesh.rotation.y = ry;
     mesh.castShadow = true; mesh.receiveShadow = true; parent.add(mesh); return mesh;
   }
   makeBatches() {
-    const defs = {gear:'box',crystal:'crystal',pole:'round',ring:'ring',aura:'thinRing',healthBack:'bar',health:'bar'};
+    const defs = {shadow:'disc',gear:'box',crystal:'crystal',pole:'round',ring:'ring',aura:'thinRing',healthBack:'bar',health:'bar'};
     const capacities=this.visuals.batchCapacities();
     for(const shape of MODEL_SHAPES)defs['part_'+shape]='model_'+shape;
     for (const [name,shape] of Object.entries(defs)) {
-      const basic = ['ring','aura','health','healthBack'].includes(name);
-      const material = basic ? new THREE.MeshBasicMaterial({color:0xffffff,transparent:['ring','aura'].includes(name),opacity:name==='aura'?0.25:name==='ring'?0.85:1,depthWrite:false,side:THREE.DoubleSide}) : this.fogMaterial('batch-'+name,0xffffff);
+      const basic = ['shadow','ring','aura','health','healthBack'].includes(name);
+      const material = basic ? new THREE.MeshBasicMaterial({color:0xffffff,transparent:['shadow','ring','aura'].includes(name),opacity:name==='shadow'?0.3:name==='aura'?0.25:name==='ring'?0.85:1,depthWrite:false,side:THREE.DoubleSide}) : this.fogMaterial('batch-'+name,0xffffff);
       const capacity=name.startsWith('part_')?(capacities[name.slice(5)]||512):2200;
       const mesh = new THREE.InstancedMesh(this.geo(shape),material,capacity);
       mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); mesh.count = 0; mesh.frustumCulled = false;
-      mesh.castShadow = !basic; mesh.receiveShadow = !basic; if (basic) mesh.renderOrder = 5;
+      mesh.castShadow = !basic; mesh.receiveShadow = !basic; if (basic) mesh.renderOrder = name === 'shadow' ? 2 : 5;
       this.entityLayer.add(mesh); this.batches.set(name,{mesh,count:0,capacity});
     }
     const additive = () => new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
@@ -150,7 +169,7 @@ export class Battlefield {
     this.worldFog.reset(Math.ceil(map.width/this.catalog.rules.grid),Math.ceil(map.height/this.catalog.rules.grid));
     for (const record of this.buildings.values()) this.entityLayer.remove(record.group);
     this.buildings.clear(); this.positions.clear(); this.lastKnown.clear(); this.clearEffects(); this.makeEnvironment();
-    this.target = {x:90,y:map.height/2}; this.distance = innerWidth < 600 ? 255 : 210; this.updateCamera();
+    this.target = {x:90,y:map.height/2}; this.distance = innerWidth < 600 ? 225 : 210; this.updateCamera();
   }
   clearEnvironment() {
     for (const item of [...this.environment.children]) {
@@ -161,36 +180,66 @@ export class Battlefield {
   }
   makeEnvironment() {
     this.clearEnvironment(); const map = this.map, pal = this.palette, rng = random(9183 + map.width);
-    const w=map.width,h=map.height,cols=48,rows=34,vertices=[],colors=[],indices=[];
-    const dark=color(pal.ground), light=color(pal.light), scratch=new THREE.Color();
+    const w=map.width,h=map.height,cols=96,rows=64,vertices=[],colors=[],uvs=[],indices=[];
+    const dark=color(pal.ground), light=color(pal.light), dry=color(pal.dry), path=color(pal.path), water=color(pal.water), shore=color(pal.dry).lerp(color(0xffffff),.12), scratch=new THREE.Color();
+    const noise=makeNoise(771+map.width), noise2=makeNoise(1933+map.height);
+    const smooth=t=>t*t*(3-2*t);
     for (let j=0;j<=rows;j++) for (let i=0;i<=cols;i++) {
-      const x=w*i/cols,z=h*j/rows; vertices.push(x,this.height(x,z)-0.3,z);
-      let mix = 0.14 + rng()*0.28;
-      if (Math.abs(z - h/2 - Math.sin(x*.014)*13) < 12) mix += .28;
-      scratch.copy(dark).lerp(light,mix);
-      for (const area of map.terrain) if (Math.hypot(x-area.x,z-area.y)<area.radius) scratch.lerp(color(pal.water),0.67);
+      const x=w*i/cols,z=h*j/rows; vertices.push(x,this.height(x,z)-0.3,z); uvs.push(x/34,z/34);
+      const tone=noise(x/70,z/70)*.55+noise(x/27,z/27)*.3+noise(x/10,z/10)*.15;
+      scratch.copy(dark).lerp(light,smooth(clamp(tone*1.25-.1,0,1)));
+      const patch=noise2(x/55,z/55); if (patch>.6) scratch.lerp(dry,Math.min(.75,(patch-.6)*2.4));
+      // Worn earth: the central lane, both home sides, outposts and camps.
+      const lane=Math.abs(z-h/2-Math.sin(x*.014)*13); if (lane<17) scratch.lerp(path,.78*smooth(1-lane/17));
+      const home=Math.min(Math.abs(x-65),Math.abs(x-(w-65))); if (home<75) scratch.lerp(path,.38*smooth(1-home/75));
+      for (const spot of map.outposts) { const d=Math.hypot(x-spot.x,z-spot.y); if (d<30) scratch.lerp(path,.7*smooth(1-d/30)); }
+      for (const spot of map.camps) { const d=Math.hypot(x-spot.x,z-spot.y); if (d<26) scratch.lerp(path,.6*smooth(1-d/26)); }
+      for (const area of map.terrain) { const d=Math.hypot(x-area.x,z-area.y); if (d<area.radius) scratch.lerp(water,.82); else if (d<area.radius+9) scratch.lerp(shore,.55*(1-(d-area.radius)/9)); }
+      const edge=Math.min(x,z,w-x,h-z); if (edge<22) scratch.multiplyScalar(.72+.28*edge/22);
+      scratch.multiplyScalar(.96+rng()*.08);
       colors.push(scratch.r,scratch.g,scratch.b);
     }
     for (let j=0;j<rows;j++) for (let i=0;i<cols;i++) { const a=j*(cols+1)+i,b=a+cols+1;indices.push(a,b,a+1,b,b+1,a+1); }
-    const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3)); geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3)); geometry.setIndex(indices); geometry.computeVertexNormals();
-    const ground = new THREE.Mesh(geometry,this.fogMaterial('ground',0xffffff,{vertexColors:true})); ground.receiveShadow=true; ground.userData.ownedGeometry = true; this.environment.add(ground);
+    const geometry = new THREE.BufferGeometry(); geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3)); geometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3)); geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2)); geometry.setIndex(indices); geometry.computeVertexNormals();
+    this.detail ??= detailTexture();
+    const ground = new THREE.Mesh(geometry,this.fogMaterial('ground-detail',0xffffff,{vertexColors:true,map:this.detail,flatShading:false,roughness:.95})); ground.receiveShadow=true; ground.userData.ownedGeometry = true; this.environment.add(ground);
     const cliff = this.fogMaterial('cliff',0x394a40);
     this.mesh(this.environment,'box',cliff,w/2,-7,h/2,w,13,h);
+    const skirt = this.mesh(this.environment,'box',this.fogMaterial('skirt-'+map.id,color(pal.ground).multiplyScalar(.3).getHex()),w/2,-14,h/2,w+2400,2,h+2400); skirt.castShadow=false;
+    // Ponds / marsh over the slow areas.
+    const pond = this.fogMaterial('pond-'+map.id,color(pal.water).lerp(color(0xffffff),.12).getHex(),{roughness:.25,metalness:.1,transparent:true,opacity:.8,flatShading:false});
+    for (const area of map.terrain) { const m=new THREE.Mesh(this.geo('disc'),pond); m.position.set(area.x,this.height(area.x,area.y)+.35,area.y); m.scale.set(area.radius*.93,1,area.radius*.93); this.environment.add(m); }
     const count=this.quality==='dusuk'?90:this.quality==='orta'?200:320;
-    const trunks=new THREE.InstancedMesh(this.geo('taper'),this.fogMaterial('trunks',0x6a6350),count);
-    const trees=new THREE.InstancedMesh(this.geo(map.id==='ayna'?'crystal':'cone'),this.fogMaterial('leaves-'+map.id,map.id==='teras'?0x79794c:map.id==='ayna'?0x7d929d:0x3d6651),count);
+    const leaf=color(pal.leaf);
+    const trunks=new THREE.InstancedMesh(this.geo('taper'),this.fogMaterial('trunks2',0x6b4f35),count);
+    const trees=new THREE.InstancedMesh(this.geo(map.id==='ayna'?'crystal':'cone'),this.fogMaterial('leaves2-'+map.id,0xffffff),count);
+    const crowns=new THREE.InstancedMesh(this.geo(map.id==='ayna'?'crystal':'cone'),this.fogMaterial('leaves2-'+map.id,0xffffff),count);
     const rocks=new THREE.InstancedMesh(this.geo('ball'),this.fogMaterial('rocks-'+map.id,pal.stone),count);
+    const blobs=new THREE.InstancedMesh(this.geo('disc'),new THREE.MeshBasicMaterial({color:0x000000,transparent:true,opacity:.26,depthWrite:false}),count);
     const temp=new THREE.Object3D(); let n=0;
     for (let i=0;i<count*4 && n<count;i++) {
       const x=rng()*w,z=rng()*h;
-      if (x>30&&x<155 || x>w-155&&x<w-30 || Math.abs(z-h/2)<28 || map.outposts.some(o=>Math.hypot(x-o.x,z-o.y)<38) || map.camps.some(o=>Math.hypot(x-o.x,z-o.y)<32)) continue;
+      if (x>30&&x<155 || x>w-155&&x<w-30 || Math.abs(z-h/2)<28 || map.outposts.some(o=>Math.hypot(x-o.x,z-o.y)<38) || map.camps.some(o=>Math.hypot(x-o.x,z-o.y)<32) || map.terrain.some(o=>Math.hypot(x-o.x,z-o.y)<o.radius+4)) continue;
       const s=3+rng()*4,y=this.height(x,z);
       temp.position.set(x,y+3,z); temp.scale.set(.8,6,.8); temp.rotation.set(0,rng()*6,0); temp.updateMatrix(); trunks.setMatrixAt(n,temp.matrix);
-      temp.position.y=y+6+s; temp.scale.set(s,s*2,s); temp.updateMatrix(); trees.setMatrixAt(n,temp.matrix);
-      const tint = color(map.id==='teras'?0x7f8053:map.id==='ayna'?0x82949f:0x3f6b55).multiplyScalar(.85+rng()*.35); trees.setColorAt(n,tint);
+      temp.position.y=y+5.5+s; temp.scale.set(s*1.08,s*1.7,s*1.08); temp.updateMatrix(); trees.setMatrixAt(n,temp.matrix);
+      temp.position.y=y+7.6+s*1.75; temp.scale.set(s*.72,s*1.35,s*.72); temp.updateMatrix(); crowns.setMatrixAt(n,temp.matrix);
+      const shade=.8+rng()*.45,tint=leaf.clone().multiplyScalar(shade); trees.setColorAt(n,tint); crowns.setColorAt(n,tint.clone().multiplyScalar(1.18));
+      temp.position.set(x+1.5,y+.25,z+1.2); temp.scale.set(s*1.25,1,s*1.1); temp.rotation.set(0,0,0); temp.updateMatrix(); blobs.setMatrixAt(n,temp.matrix);
       temp.position.set(clamp(x+10,0,w),y+1.3,clamp(z+7,0,h)); temp.scale.set(2+rng()*3,1.5+rng()*2,2+rng()*3); temp.rotation.set(rng(),rng()*6,rng()); temp.updateMatrix(); rocks.setMatrixAt(n,temp.matrix); n++;
     }
-    for (const mesh of [trunks,trees,rocks]) { mesh.count=n; mesh.castShadow=true; mesh.receiveShadow=true; this.environment.add(mesh); }
+    blobs.count=n; blobs.renderOrder=1; this.environment.add(blobs);
+    for (const mesh of [trunks,trees,crowns,rocks]) { mesh.count=n; mesh.castShadow=true; mesh.receiveShadow=true; this.environment.add(mesh); }
+    // Low bushes and grass tufts add texture to open ground.
+    const tuftCount=this.quality==='dusuk'?120:this.quality==='orta'?320:520;
+    const tufts=new THREE.InstancedMesh(this.geo('cone'),this.fogMaterial('tufts-'+map.id,0xffffff),tuftCount); let t=0;
+    for (let i=0;i<tuftCount*3 && t<tuftCount;i++) {
+      const x=rng()*w,z=rng()*h;
+      if (Math.abs(z-h/2-Math.sin(x*.014)*13)<14 || map.terrain.some(o=>Math.hypot(x-o.x,z-o.y)<o.radius+2) || map.outposts.some(o=>Math.hypot(x-o.x,z-o.y)<16)) continue;
+      const s=.9+rng()*1.5; temp.position.set(x,this.height(x,z)+s*.7,z); temp.scale.set(s*1.3,s*1.5,s*1.3); temp.rotation.set(0,rng()*6,0); temp.updateMatrix(); tufts.setMatrixAt(t,temp.matrix);
+      tufts.setColorAt(t,leaf.clone().lerp(light,.35+rng()*.4).multiplyScalar(.9+rng()*.3)); t++;
+    }
+    tufts.count=t; tufts.receiveShadow=true; this.environment.add(tufts);
     const postMat=this.fogMaterial('postStone',0xc2b793), metal=this.fogMaterial('metal',0x776c50);
     for (const post of map.outposts) {
       const y=this.height(post.x,post.y);
@@ -456,6 +505,7 @@ export class Battlefield {
       const x=pos.x+(slot.x-e.x)*spread+fx*push,z=pos.y+(slot.y-e.y)*spread+fz*push;
       const hop=moving?Math.sin(time*10+i)*.18:fighting?Math.abs(Math.sin(time*8+i*1.7))*.14:0,y=this.height(x,z)+hop;
       const lean=reach>0?swing*.32-recoil*.16:-swing*.12-recoil*.16;
+      if(this.quality!=='yuksek'){const r=e.role==='siege'?4.2:e.role==='cavalry'?2.7:e.kind==='hero'?2.8:1.8;this.instance('shadow',x+.6,this.height(x,z)+.22,z+.5,r,1,r*.8,0x000000);}
       this.figure(parts,x,y,z,rotation,lean,hurt?0xfff3df:null,hurt?1.25:1);
       let pt=record.pts[i];if(!pt){pt={x,z};record.pts[i]=pt;}else{pt.x=x;pt.z=z;}
     }
@@ -513,6 +563,7 @@ export class Battlefield {
       let p=this.positions.get(e.id);if(!p){p={x:e.x,y:e.y};this.positions.set(e.id,p);}p.x+=(e.x-p.x)*smooth;p.y+=(e.y-p.y)*smooth;
       if(e.kind==='building'){
         const b=this.buildings.get(e.id);if(b){const progress=b.definition.buildTime?clamp(1-(e.readyAt-this.view.time)/b.definition.buildTime,0,1):1;b.group.scale.y=.18+.82*progress;b.scaffold.visible=progress<1;}
+        if(this.quality!=='yuksek'){const bounds=this.modelFor(e).bounds.max,r=Math.max(bounds[0],bounds[2])*.98;this.instance('shadow',p.x+2,this.height(p.x,p.y)+.2,p.y+1.6,r,1,r*.86,0x000000);}
       }else this.soldier(e,p,e.id,time);
       const selected=this.selected.has(e.id),hero=e.kind==='hero',building=e.kind==='building';
       if(selected&&hero){
@@ -525,7 +576,10 @@ export class Battlefield {
         this.instance('gear',r.x+2,y+8,r.y,4,3,.4,0xe7ce91);
         this.instance('ring',r.x,y+.4,r.y,4,1,4,0xe7ce91);
       }
-      if(selected||hero||e.player===0&&e.kind!=='building')this.instance('ring',p.x,this.height(p.x,p.y)+.3,p.y,building?16:hero?7:8,1,building?16:hero?7:8,selected?0xb7f8e0:hero?0xf6cd62:0x6cb7b5);
+      // Every battalion carries a team-coloured base ring so friend and foe read at a glance.
+      if(selected||!building){const own=e.player===0,size=building?16:hero?7.5:own?8:6.6;
+        const tint=selected?0xb7f8e0:own?(hero?0xf6cd62:0x6cb7b5):e.team===0?0x7fb2e8:e.team===1?0xe8735c:0xd9c08a;
+        this.instance('ring',p.x,this.height(p.x,p.y)+.3,p.y,size,1,size,tint);}
       if(selected||e.hp<e.maxHp*.98||hero||building&&e.readyAt>this.view.time){
         const y=this.height(p.x,p.y)+this.modelFor(e).bounds.max[1]+2,width=building?21:13;
         const q=this.camera.quaternion;this.instance('healthBack',p.x,y,p.y,width+1,1.9,1,0x19272a,q);
