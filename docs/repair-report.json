@@ -1,0 +1,29 @@
+{
+  "tests_passed": 284,
+  "tests_failed": 0,
+  "mutations_detected": 5,
+  "mutations_survived": 0,
+  "cli_match_runs": 30,
+  "balance_matches": 120,
+  "balance_timeouts": 0,
+  "faction_win_rate": {
+    "sedef": 0.5,
+    "filiz": 0.65,
+    "koz": 0.425,
+    "pus": 0.4,
+    "yel": 0.55,
+    "prizma": 0.475
+  },
+  "median_duration_s": 354.75,
+  "auras": 18,
+  "power_secondary_rules_tested": true,
+  "fog_maps_tested": [
+    "catal",
+    "havza",
+    "teras",
+    "ayna"
+  ],
+  "renderer_scope": "The complete W2 render loop is not in this workspace. Actual audio module and sim formations are supplied; W2 event/camera and figure connections are specified in SES_VE_DIZILIS.md.",
+  "audio_module_added": true,
+  "formation_and_separation_implemented": true
+}

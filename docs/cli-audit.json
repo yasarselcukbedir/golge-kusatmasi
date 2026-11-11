@@ -1,0 +1,480 @@
+{
+  "passed": true,
+  "match_cases": 30,
+  "separate_process_snapshot_roundtrips": 3,
+  "reproduced_balance_records": 4,
+  "modes_checked": 9,
+  "maps_checked": 4,
+  "invalid_arguments_rejected": true,
+  "other_cwd_catalog_equal": true,
+  "wall_seconds": {
+    "catal": 1,
+    "havza": 0,
+    "teras": 1,
+    "ayna": 1
+  },
+  "results": {
+    "seed-1": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343,
+      "final_hash": "23553bc2"
+    },
+    "snapshot-1": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343,
+      "final_hash": "23553bc2"
+    },
+    "seed-2": {
+      "seed": 2,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 341.5,
+      "final_hash": "87cf602d"
+    },
+    "snapshot-2": {
+      "seed": 2,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 341.5,
+      "final_hash": "87cf602d"
+    },
+    "seed-3": {
+      "seed": 3,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 324,
+      "final_hash": "2c383a18"
+    },
+    "snapshot-3": {
+      "seed": 3,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 324,
+      "final_hash": "2c383a18"
+    },
+    "seed-4": {
+      "seed": 4,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 618,
+      "final_hash": "671f5f8a"
+    },
+    "seed-5": {
+      "seed": 5,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 327,
+      "final_hash": "a059cc6b"
+    },
+    "mode-1v1": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 343,
+      "final_hash": "23553bc2"
+    },
+    "mode-1v2": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 304.5,
+      "final_hash": "abbcaba9"
+    },
+    "mode-1v3": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 290,
+      "final_hash": "f787eb9c"
+    },
+    "mode-2v1": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "2v1",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 0,
+      "duration_s": 325,
+      "final_hash": "8d4989d8"
+    },
+    "mode-2v2": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "2v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 350.5,
+      "final_hash": "8b6039c3"
+    },
+    "mode-2v3": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "2v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 345.5,
+      "final_hash": "47cbb025"
+    },
+    "mode-3v1": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "3v1",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 0,
+      "duration_s": 296.5,
+      "final_hash": "efcbf449"
+    },
+    "mode-3v2": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "3v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 0,
+      "duration_s": 363,
+      "final_hash": "9605df52"
+    },
+    "mode-3v3": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "3v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 396,
+      "final_hash": "4a6bd2ef"
+    },
+    "map-2v2-catal": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "2v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 350.5,
+      "final_hash": "8b6039c3"
+    },
+    "map-3v3-catal": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "3v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 1200,
+      "winner_team": 1,
+      "duration_s": 396,
+      "final_hash": "4a6bd2ef"
+    },
+    "map-2v2-havza": {
+      "seed": 1,
+      "map": "havza",
+      "mode": "2v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 413.5,
+      "final_hash": "54654e15"
+    },
+    "map-3v3-havza": {
+      "seed": 1,
+      "map": "havza",
+      "mode": "3v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 1200,
+      "winner_team": 1,
+      "duration_s": 405.5,
+      "final_hash": "bc48f61f"
+    },
+    "map-2v2-teras": {
+      "seed": 1,
+      "map": "teras",
+      "mode": "2v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 453,
+      "final_hash": "11ffe9fd"
+    },
+    "map-3v3-teras": {
+      "seed": 1,
+      "map": "teras",
+      "mode": "3v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 1200,
+      "winner_team": 1,
+      "duration_s": 443,
+      "final_hash": "3459b00d"
+    },
+    "map-2v2-ayna": {
+      "seed": 1,
+      "map": "ayna",
+      "mode": "2v2",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 600,
+      "winner_team": 1,
+      "duration_s": 450,
+      "final_hash": "65d0152c"
+    },
+    "map-3v3-ayna": {
+      "seed": 1,
+      "map": "ayna",
+      "mode": "3v3",
+      "factions": [
+        "sedef",
+        "filiz",
+        "koz",
+        "pus",
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 1200,
+      "winner_team": 1,
+      "duration_s": 390,
+      "final_hash": "31165aa7"
+    },
+    "replay-0": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343,
+      "final_hash": "23553bc2"
+    },
+    "replay-1": {
+      "seed": 2,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 342,
+      "final_hash": "563a3401"
+    },
+    "replay-2": {
+      "seed": 3,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 339,
+      "final_hash": "5c28e356"
+    },
+    "replay-3": {
+      "seed": 120,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 629.5,
+      "final_hash": "247f7538"
+    },
+    "short-limit": {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 0.1,
+      "winner_team": null,
+      "duration_s": 0,
+      "final_hash": "646519d2"
+    }
+  }
+}

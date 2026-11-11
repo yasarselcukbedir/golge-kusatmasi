@@ -1,0 +1,263 @@
+{
+  "valid_gfm_tables": 49,
+  "invalid_pipe_blocks": 0,
+  "per_faction_roster_tables": {
+    "sedef": 7,
+    "filiz": 7,
+    "koz": 7,
+    "pus": 7,
+    "yel": 7,
+    "prizma": 7
+  },
+  "all_catalog_names_preserved": true,
+  "all_prototype_rename_entries_preserved": true,
+  "generator_idempotent": true,
+  "document_sha256": "70e00b2227e3d97ca75cbd4e9890c197d7dc9d3da603d0ba2916e06ead51a57d",
+  "tables": [
+    {
+      "line": 29,
+      "columns": 3,
+      "data_rows": 60
+    },
+    {
+      "line": 100,
+      "columns": 10,
+      "data_rows": 5
+    },
+    {
+      "line": 108,
+      "columns": 8,
+      "data_rows": 3
+    },
+    {
+      "line": 116,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 122,
+      "columns": 10,
+      "data_rows": 6
+    },
+    {
+      "line": 131,
+      "columns": 7,
+      "data_rows": 4
+    },
+    {
+      "line": 138,
+      "columns": 9,
+      "data_rows": 8
+    },
+    {
+      "line": 149,
+      "columns": 6,
+      "data_rows": 4
+    },
+    {
+      "line": 160,
+      "columns": 10,
+      "data_rows": 5
+    },
+    {
+      "line": 168,
+      "columns": 8,
+      "data_rows": 3
+    },
+    {
+      "line": 176,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 182,
+      "columns": 10,
+      "data_rows": 6
+    },
+    {
+      "line": 191,
+      "columns": 7,
+      "data_rows": 4
+    },
+    {
+      "line": 198,
+      "columns": 9,
+      "data_rows": 8
+    },
+    {
+      "line": 209,
+      "columns": 6,
+      "data_rows": 4
+    },
+    {
+      "line": 220,
+      "columns": 10,
+      "data_rows": 5
+    },
+    {
+      "line": 228,
+      "columns": 8,
+      "data_rows": 3
+    },
+    {
+      "line": 236,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 242,
+      "columns": 10,
+      "data_rows": 6
+    },
+    {
+      "line": 251,
+      "columns": 7,
+      "data_rows": 4
+    },
+    {
+      "line": 258,
+      "columns": 9,
+      "data_rows": 8
+    },
+    {
+      "line": 269,
+      "columns": 6,
+      "data_rows": 4
+    },
+    {
+      "line": 280,
+      "columns": 10,
+      "data_rows": 5
+    },
+    {
+      "line": 288,
+      "columns": 8,
+      "data_rows": 3
+    },
+    {
+      "line": 296,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 302,
+      "columns": 10,
+      "data_rows": 6
+    },
+    {
+      "line": 311,
+      "columns": 7,
+      "data_rows": 4
+    },
+    {
+      "line": 318,
+      "columns": 9,
+      "data_rows": 8
+    },
+    {
+      "line": 329,
+      "columns": 6,
+      "data_rows": 4
+    },
+    {
+      "line": 340,
+      "columns": 10,
+      "data_rows": 5
+    },
+    {
+      "line": 348,
+      "columns": 8,
+      "data_rows": 3
+    },
+    {
+      "line": 356,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 362,
+      "columns": 10,
+      "data_rows": 6
+    },
+    {
+      "line": 371,
+      "columns": 7,
+      "data_rows": 4
+    },
+    {
+      "line": 378,
+      "columns": 9,
+      "data_rows": 8
+    },
+    {
+      "line": 389,
+      "columns": 6,
+      "data_rows": 4
+    },
+    {
+      "line": 400,
+      "columns": 10,
+      "data_rows": 5
+    },
+    {
+      "line": 408,
+      "columns": 8,
+      "data_rows": 3
+    },
+    {
+      "line": 416,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 422,
+      "columns": 10,
+      "data_rows": 6
+    },
+    {
+      "line": 431,
+      "columns": 7,
+      "data_rows": 4
+    },
+    {
+      "line": 438,
+      "columns": 9,
+      "data_rows": 8
+    },
+    {
+      "line": 449,
+      "columns": 6,
+      "data_rows": 4
+    },
+    {
+      "line": 492,
+      "columns": 5,
+      "data_rows": 4
+    },
+    {
+      "line": 501,
+      "columns": 6,
+      "data_rows": 3
+    },
+    {
+      "line": 511,
+      "columns": 7,
+      "data_rows": 3
+    },
+    {
+      "line": 527,
+      "columns": 2,
+      "data_rows": 14
+    },
+    {
+      "line": 546,
+      "columns": 3,
+      "data_rows": 11
+    },
+    {
+      "line": 605,
+      "columns": 3,
+      "data_rows": 6
+    }
+  ]
+}

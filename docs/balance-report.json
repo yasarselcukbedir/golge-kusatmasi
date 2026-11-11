@@ -1,0 +1,1573 @@
+{
+  "generated_by": "node deliverable/game/tools/sim-cli.mjs balance --output deliverable/docs/balance-report.json",
+  "matches": [
+    {
+      "seed": 1,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343
+    },
+    {
+      "seed": 2,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 342
+    },
+    {
+      "seed": 3,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 339
+    },
+    {
+      "seed": 4,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 321.5
+    },
+    {
+      "seed": 5,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 621
+    },
+    {
+      "seed": 6,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 361
+    },
+    {
+      "seed": 7,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 331.5
+    },
+    {
+      "seed": 8,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 589.5
+    },
+    {
+      "seed": 9,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343.5
+    },
+    {
+      "seed": 10,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 290.5
+    },
+    {
+      "seed": 11,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 454
+    },
+    {
+      "seed": 12,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 657
+    },
+    {
+      "seed": 13,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 385
+    },
+    {
+      "seed": 14,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 321.5
+    },
+    {
+      "seed": 15,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 462
+    },
+    {
+      "seed": 16,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 374.5
+    },
+    {
+      "seed": 17,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 373.5
+    },
+    {
+      "seed": 18,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 463
+    },
+    {
+      "seed": 19,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 455
+    },
+    {
+      "seed": 20,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "sedef",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 402
+    },
+    {
+      "seed": 21,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 348.5
+    },
+    {
+      "seed": 22,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 343.5
+    },
+    {
+      "seed": 23,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 323
+    },
+    {
+      "seed": 24,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 372.5
+    },
+    {
+      "seed": 25,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 362.5
+    },
+    {
+      "seed": 26,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 341.5
+    },
+    {
+      "seed": 27,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 501.5
+    },
+    {
+      "seed": 28,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 435
+    },
+    {
+      "seed": 29,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 338.5
+    },
+    {
+      "seed": 30,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 330.5
+    },
+    {
+      "seed": 31,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 410
+    },
+    {
+      "seed": 32,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 551.5
+    },
+    {
+      "seed": 33,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 312.5
+    },
+    {
+      "seed": 34,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 338
+    },
+    {
+      "seed": 35,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 379.5
+    },
+    {
+      "seed": 36,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 330.5
+    },
+    {
+      "seed": 37,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 299.5
+    },
+    {
+      "seed": 38,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 344
+    },
+    {
+      "seed": 39,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 327.5
+    },
+    {
+      "seed": 40,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "filiz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 355.5
+    },
+    {
+      "seed": 41,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 380
+    },
+    {
+      "seed": 42,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 375
+    },
+    {
+      "seed": 43,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 340
+    },
+    {
+      "seed": 44,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 321
+    },
+    {
+      "seed": 45,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 552.5
+    },
+    {
+      "seed": 46,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 427
+    },
+    {
+      "seed": 47,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 342.5
+    },
+    {
+      "seed": 48,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343.5
+    },
+    {
+      "seed": 49,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 528
+    },
+    {
+      "seed": 50,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 423.5
+    },
+    {
+      "seed": 51,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 323
+    },
+    {
+      "seed": 52,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 413.5
+    },
+    {
+      "seed": 53,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 321
+    },
+    {
+      "seed": 54,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 334.5
+    },
+    {
+      "seed": 55,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 374.5
+    },
+    {
+      "seed": 56,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 350.5
+    },
+    {
+      "seed": 57,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 534
+    },
+    {
+      "seed": 58,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 456.5
+    },
+    {
+      "seed": 59,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 336
+    },
+    {
+      "seed": 60,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "koz",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 651.5
+    },
+    {
+      "seed": 61,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 309.5
+    },
+    {
+      "seed": 62,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 328.5
+    },
+    {
+      "seed": 63,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 319.5
+    },
+    {
+      "seed": 64,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 321
+    },
+    {
+      "seed": 65,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 343
+    },
+    {
+      "seed": 66,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 459
+    },
+    {
+      "seed": 67,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 308
+    },
+    {
+      "seed": 68,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 327.5
+    },
+    {
+      "seed": 69,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 496
+    },
+    {
+      "seed": 70,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 355
+    },
+    {
+      "seed": 71,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 367
+    },
+    {
+      "seed": 72,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 364.5
+    },
+    {
+      "seed": 73,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 305
+    },
+    {
+      "seed": 74,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 428.5
+    },
+    {
+      "seed": 75,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 315
+    },
+    {
+      "seed": 76,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 418.5
+    },
+    {
+      "seed": 77,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 335
+    },
+    {
+      "seed": 78,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 552.5
+    },
+    {
+      "seed": 79,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 334
+    },
+    {
+      "seed": 80,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "pus",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 593.5
+    },
+    {
+      "seed": 81,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 319.5
+    },
+    {
+      "seed": 82,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 383.5
+    },
+    {
+      "seed": 83,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 490
+    },
+    {
+      "seed": 84,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 327.5
+    },
+    {
+      "seed": 85,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 349
+    },
+    {
+      "seed": 86,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 354.5
+    },
+    {
+      "seed": 87,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 320
+    },
+    {
+      "seed": 88,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 327
+    },
+    {
+      "seed": 89,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 329
+    },
+    {
+      "seed": 90,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 361
+    },
+    {
+      "seed": 91,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 386.5
+    },
+    {
+      "seed": 92,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 351
+    },
+    {
+      "seed": 93,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 607
+    },
+    {
+      "seed": 94,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 325.5
+    },
+    {
+      "seed": 95,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 318.5
+    },
+    {
+      "seed": 96,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 421
+    },
+    {
+      "seed": 97,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 397.5
+    },
+    {
+      "seed": 98,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 341
+    },
+    {
+      "seed": 99,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 523
+    },
+    {
+      "seed": 100,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "yel",
+        "prizma"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 427
+    },
+    {
+      "seed": 101,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 527
+    },
+    {
+      "seed": 102,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 474
+    },
+    {
+      "seed": 103,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 717.5
+    },
+    {
+      "seed": 104,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "sedef"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 494.5
+    },
+    {
+      "seed": 105,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 439
+    },
+    {
+      "seed": 106,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 333.5
+    },
+    {
+      "seed": 107,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 332
+    },
+    {
+      "seed": 108,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "filiz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 271.5
+    },
+    {
+      "seed": 109,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 333
+    },
+    {
+      "seed": 110,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 408.5
+    },
+    {
+      "seed": 111,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 338
+    },
+    {
+      "seed": 112,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "koz"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 513.5
+    },
+    {
+      "seed": 113,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 533.5
+    },
+    {
+      "seed": 114,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 508.5
+    },
+    {
+      "seed": 115,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 466.5
+    },
+    {
+      "seed": 116,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "pus"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 330.5
+    },
+    {
+      "seed": 117,
+      "map": "catal",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 333.5
+    },
+    {
+      "seed": 118,
+      "map": "havza",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 325.5
+    },
+    {
+      "seed": 119,
+      "map": "teras",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 1,
+      "duration_s": 312.5
+    },
+    {
+      "seed": 120,
+      "map": "ayna",
+      "mode": "1v1",
+      "factions": [
+        "prizma",
+        "yel"
+      ],
+      "difficulty": "normal",
+      "max_seconds": 2400,
+      "winner_team": 0,
+      "duration_s": 629.5
+    }
+  ],
+  "faction_win_rate": {
+    "sedef": 0.5,
+    "filiz": 0.65,
+    "koz": 0.425,
+    "pus": 0.4,
+    "yel": 0.55,
+    "prizma": 0.475
+  }
+}

@@ -1,0 +1,432 @@
+[
+  {
+    "name": "seed-1",
+    "args": [
+      "match",
+      "--seed",
+      "1"
+    ],
+    "file": "seed-1.json",
+    "expect": "match"
+  },
+  {
+    "name": "snapshot-1",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--snapshot-at",
+      "300"
+    ],
+    "file": "snapshot-1.json",
+    "expect": "match"
+  },
+  {
+    "name": "seed-2",
+    "args": [
+      "match",
+      "--seed",
+      "2"
+    ],
+    "file": "seed-2.json",
+    "expect": "match"
+  },
+  {
+    "name": "snapshot-2",
+    "args": [
+      "match",
+      "--seed",
+      "2",
+      "--snapshot-at",
+      "300"
+    ],
+    "file": "snapshot-2.json",
+    "expect": "match"
+  },
+  {
+    "name": "seed-3",
+    "args": [
+      "match",
+      "--seed",
+      "3"
+    ],
+    "file": "seed-3.json",
+    "expect": "match"
+  },
+  {
+    "name": "snapshot-3",
+    "args": [
+      "match",
+      "--seed",
+      "3",
+      "--snapshot-at",
+      "300"
+    ],
+    "file": "snapshot-3.json",
+    "expect": "match"
+  },
+  {
+    "name": "seed-4",
+    "args": [
+      "match",
+      "--seed",
+      "4"
+    ],
+    "file": "seed-4.json",
+    "expect": "match"
+  },
+  {
+    "name": "seed-5",
+    "args": [
+      "match",
+      "--seed",
+      "5"
+    ],
+    "file": "seed-5.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-1v1",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "1v1",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-1v1.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-1v2",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "1v2",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-1v2.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-1v3",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "1v3",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-1v3.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-2v1",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v1",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-2v1.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-2v2",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v2",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-2v2.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-2v3",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v3",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-2v3.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-3v1",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v1",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-3v1.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-3v2",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v2",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-3v2.json",
+    "expect": "match"
+  },
+  {
+    "name": "mode-3v3",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v3",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "mode-3v3.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-2v2-catal",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v2",
+      "--map",
+      "catal",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "map-2v2-catal.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-3v3-catal",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v3",
+      "--map",
+      "catal",
+      "--max-seconds",
+      "1200"
+    ],
+    "file": "map-3v3-catal.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-2v2-havza",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v2",
+      "--map",
+      "havza",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "map-2v2-havza.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-3v3-havza",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v3",
+      "--map",
+      "havza",
+      "--max-seconds",
+      "1200"
+    ],
+    "file": "map-3v3-havza.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-2v2-teras",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v2",
+      "--map",
+      "teras",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "map-2v2-teras.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-3v3-teras",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v3",
+      "--map",
+      "teras",
+      "--max-seconds",
+      "1200"
+    ],
+    "file": "map-3v3-teras.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-2v2-ayna",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "2v2",
+      "--map",
+      "ayna",
+      "--max-seconds",
+      "600"
+    ],
+    "file": "map-2v2-ayna.json",
+    "expect": "match"
+  },
+  {
+    "name": "map-3v3-ayna",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--mode",
+      "3v3",
+      "--map",
+      "ayna",
+      "--max-seconds",
+      "1200"
+    ],
+    "file": "map-3v3-ayna.json",
+    "expect": "match"
+  },
+  {
+    "name": "replay-0",
+    "args": [
+      "match",
+      "--seed",
+      "1",
+      "--map",
+      "catal",
+      "--mode",
+      "1v1",
+      "--factions",
+      "sedef,filiz",
+      "--difficulty",
+      "normal",
+      "--max-seconds",
+      "2400"
+    ],
+    "file": "replay-0.json",
+    "expect": "match"
+  },
+  {
+    "name": "replay-1",
+    "args": [
+      "match",
+      "--seed",
+      "2",
+      "--map",
+      "havza",
+      "--mode",
+      "1v1",
+      "--factions",
+      "sedef,filiz",
+      "--difficulty",
+      "normal",
+      "--max-seconds",
+      "2400"
+    ],
+    "file": "replay-1.json",
+    "expect": "match"
+  },
+  {
+    "name": "replay-2",
+    "args": [
+      "match",
+      "--seed",
+      "3",
+      "--map",
+      "teras",
+      "--mode",
+      "1v1",
+      "--factions",
+      "sedef,filiz",
+      "--difficulty",
+      "normal",
+      "--max-seconds",
+      "2400"
+    ],
+    "file": "replay-2.json",
+    "expect": "match"
+  },
+  {
+    "name": "replay-3",
+    "args": [
+      "match",
+      "--seed",
+      "120",
+      "--map",
+      "ayna",
+      "--mode",
+      "1v1",
+      "--factions",
+      "prizma,yel",
+      "--difficulty",
+      "normal",
+      "--max-seconds",
+      "2400"
+    ],
+    "file": "replay-3.json",
+    "expect": "match"
+  },
+  {
+    "name": "short-limit",
+    "args": [
+      "match",
+      "--max-seconds",
+      "0.1"
+    ],
+    "file": "short-limit.json",
+    "expect": "match"
+  }
+]

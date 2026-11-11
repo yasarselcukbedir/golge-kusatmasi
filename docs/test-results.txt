@@ -1,0 +1,285 @@
+PASS catalog six complete distinct factions
+PASS catalog copies cannot mutate content
+PASS income base rate
+PASS income built economy plus upgraded rate
+PASS construction pays and has real build delay
+PASS building collision and radius are enforced
+PASS production queue pays, waits, spawns and rally moves
+PASS queue limit and wrong production building
+PASS hero recruitment queue and uniqueness
+PASS outpost requires occupation time and grants income
+PASS contested outpost cannot be captured
+PASS sedef counter infantry > cavalry both orders and three seeds
+PASS sedef counter cavalry > ranged both orders and three seeds
+PASS sedef counter ranged > infantry both orders and three seeds
+PASS filiz counter infantry > cavalry both orders and three seeds
+PASS filiz counter cavalry > ranged both orders and three seeds
+PASS filiz counter ranged > infantry both orders and three seeds
+PASS koz counter infantry > cavalry both orders and three seeds
+PASS koz counter cavalry > ranged both orders and three seeds
+PASS koz counter ranged > infantry both orders and three seeds
+PASS pus counter infantry > cavalry both orders and three seeds
+PASS pus counter cavalry > ranged both orders and three seeds
+PASS pus counter ranged > infantry both orders and three seeds
+PASS yel counter infantry > cavalry both orders and three seeds
+PASS yel counter cavalry > ranged both orders and three seeds
+PASS yel counter ranged > infantry both orders and three seeds
+PASS prizma counter infantry > cavalry both orders and three seeds
+PASS prizma counter cavalry > ranged both orders and three seeds
+PASS prizma counter ranged > infantry both orders and three seeds
+PASS counter multiplier affects real damage
+PASS siege building bonus and other building resistance
+PASS defense tower attacks hostiles without command
+PASS sedef upgrade damage changes real stats
+PASS sedef upgrade hp changes real stats
+PASS sedef upgrade income changes real stats
+PASS sedef upgrade speed changes real stats
+PASS filiz upgrade damage changes real stats
+PASS filiz upgrade hp changes real stats
+PASS filiz upgrade income changes real stats
+PASS filiz upgrade speed changes real stats
+PASS koz upgrade damage changes real stats
+PASS koz upgrade hp changes real stats
+PASS koz upgrade income changes real stats
+PASS koz upgrade speed changes real stats
+PASS pus upgrade damage changes real stats
+PASS pus upgrade hp changes real stats
+PASS pus upgrade income changes real stats
+PASS pus upgrade speed changes real stats
+PASS yel upgrade damage changes real stats
+PASS yel upgrade hp changes real stats
+PASS yel upgrade income changes real stats
+PASS yel upgrade speed changes real stats
+PASS prizma upgrade damage changes real stats
+PASS prizma upgrade hp changes real stats
+PASS prizma upgrade income changes real stats
+PASS prizma upgrade speed changes real stats
+PASS destroyed forge cancels research
+PASS hero combat XP levels and unlocks second ability
+PASS sedef sedef_ability_0_0 damage actual effect
+PASS sedef sedef_ability_0_1 shield actual effect
+PASS sedef sedef_ability_1_0 buff actual effect
+PASS sedef sedef_ability_1_1 summon actual effect
+PASS sedef sedef_ability_2_0 heal actual effect
+PASS sedef sedef_ability_2_1 stun actual effect
+PASS sedef sedef_power_0 shield actual effect
+PASS sedef sedef_power_1 economy actual effect
+PASS sedef sedef_power_2 damage actual effect
+PASS sedef sedef_power_3 summon actual effect
+PASS filiz filiz_ability_0_0 heal actual effect
+PASS filiz filiz_ability_0_1 poison actual effect
+PASS filiz filiz_ability_1_0 summon actual effect
+PASS filiz filiz_ability_1_1 stun actual effect
+PASS filiz filiz_ability_2_0 shield actual effect
+PASS filiz filiz_ability_2_1 buff actual effect
+PASS filiz filiz_power_0 shield actual effect
+PASS filiz filiz_power_1 economy actual effect
+PASS filiz filiz_power_2 damage actual effect
+PASS filiz filiz_power_3 summon actual effect
+PASS koz koz_ability_0_0 damage actual effect
+PASS koz koz_ability_0_1 shield actual effect
+PASS koz koz_ability_1_0 stun actual effect
+PASS koz koz_ability_1_1 buff actual effect
+PASS koz koz_ability_2_0 heal actual effect
+PASS koz koz_ability_2_1 damage actual effect
+PASS koz koz_power_0 shield actual effect
+PASS koz koz_power_1 economy actual effect
+PASS koz koz_power_2 damage actual effect
+PASS koz koz_power_3 summon actual effect
+PASS pus pus_ability_0_0 poison actual effect
+PASS pus pus_ability_0_1 shield actual effect
+PASS pus pus_ability_1_0 summon actual effect
+PASS pus pus_ability_1_1 damage actual effect
+PASS pus pus_ability_2_0 heal actual effect
+PASS pus pus_ability_2_1 buff actual effect
+PASS pus pus_power_0 shield actual effect
+PASS pus pus_power_1 economy actual effect
+PASS pus pus_power_2 damage actual effect
+PASS pus pus_power_3 summon actual effect
+PASS yel yel_ability_0_0 damage actual effect
+PASS yel yel_ability_0_1 buff actual effect
+PASS yel yel_ability_1_0 summon actual effect
+PASS yel yel_ability_1_1 stun actual effect
+PASS yel yel_ability_2_0 heal actual effect
+PASS yel yel_ability_2_1 shield actual effect
+PASS yel yel_power_0 shield actual effect
+PASS yel yel_power_1 economy actual effect
+PASS yel yel_power_2 damage actual effect
+PASS yel yel_power_3 summon actual effect
+PASS prizma prizma_ability_0_0 damage actual effect
+PASS prizma prizma_ability_0_1 shield actual effect
+PASS prizma prizma_ability_1_0 stun actual effect
+PASS prizma prizma_ability_1_1 summon actual effect
+PASS prizma prizma_ability_2_0 heal actual effect
+PASS prizma prizma_ability_2_1 buff actual effect
+PASS prizma prizma_power_0 shield actual effect
+PASS prizma prizma_power_1 economy actual effect
+PASS prizma prizma_power_2 damage actual effect
+PASS prizma prizma_power_3 summon actual effect
+PASS heal caps at maximum HP
+PASS neutral camp cleared by combat grants gold and XP once
+PASS fog hides distant enemies and secret economy
+PASS explored cells remain after vision moves away
+PASS allied vision includes other allied player
+PASS retreat moves home and heals
+PASS pause freezes ticks, income and unit position
+PASS fixed step accumulation equals one large advance
+PASS events drain exactly once and are JSON safe
+PASS state query cannot mutate simulation
+PASS skirmish victory waits for every enemy keep
+PASS own team eliminated loses
+PASS ilk-isik implements destroy victory
+PASS ilk-isik own center destruction loses
+PASS ilk-isik time limit loses
+PASS uc-muhur implements hold victory
+PASS uc-muhur own center destruction loses
+PASS uc-muhur time limit loses
+PASS son-kervan implements escort victory
+PASS son-kervan own center destruction loses
+PASS son-kervan time limit loses
+PASS hold timer resets when control is lost
+PASS escort waits for guards and advances with guards
+PASS escort destruction loses
+PASS serialize and fresh restore produce identical complete future
+PASS same seed gives identical state and events
+PASS distinct seeds give distinct hashes
+PASS unsupported save version rejected
+PASS invalid configurations and hostile ownership rejected
+PASS 1v1 complete stable AI simulation
+PASS 1v2 complete stable AI simulation
+PASS 1v3 complete stable AI simulation
+PASS 2v1 complete stable AI simulation
+PASS 2v2 complete stable AI simulation
+PASS 2v3 complete stable AI simulation
+PASS 3v1 complete stable AI simulation
+PASS 3v2 complete stable AI simulation
+PASS 3v3 complete stable AI simulation
+PASS catal 3v3 bounded match
+PASS havza 3v3 bounded match
+PASS teras 3v3 bounded match
+PASS ayna 3v3 bounded match
+PASS AI uses economy, upgrades, counters, siege, heroes, abilities, powers and outposts
+PASS difficulty strongly changes results in both team orders
+PASS bastion trait reduces incoming damage near a friendly building
+PASS renewal trait heals away from the home base
+PASS bulwark trait changes hit points, speed and special building damage
+PASS swarm trait changes price, training time and population cap
+PASS charge trait boosts the first cavalry hit
+PASS resonance trait shortens ability cooldown
+PASS slow terrain has an actual movement cost
+PASS AI retreats damaged troops and defends its home
+PASS sedef unit production charges exact gold and rejects insufficient gold
+PASS sedef live and queued population share the cap
+PASS sedef each ability rejects visible points outside its range
+PASS sedef each power rejects insufficient harmony without effects
+PASS filiz unit production charges exact gold and rejects insufficient gold
+PASS filiz live and queued population share the cap
+PASS filiz each ability rejects visible points outside its range
+PASS filiz each power rejects insufficient harmony without effects
+PASS koz unit production charges exact gold and rejects insufficient gold
+PASS koz live and queued population share the cap
+PASS koz each ability rejects visible points outside its range
+PASS koz each power rejects insufficient harmony without effects
+PASS pus unit production charges exact gold and rejects insufficient gold
+PASS pus live and queued population share the cap
+PASS pus each ability rejects visible points outside its range
+PASS pus each power rejects insufficient harmony without effects
+PASS yel unit production charges exact gold and rejects insufficient gold
+PASS yel live and queued population share the cap
+PASS yel each ability rejects visible points outside its range
+PASS yel each power rejects insufficient harmony without effects
+PASS prizma unit production charges exact gold and rejects insufficient gold
+PASS prizma live and queued population share the cap
+PASS prizma each ability rejects visible points outside its range
+PASS prizma each power rejects insufficient harmony without effects
+PASS catal fog rows and world cells preserve every texel
+PASS havza fog rows and world cells preserve every texel
+PASS teras fog rows and world cells preserve every texel
+PASS ayna fog rows and world cells preserve every texel
+PASS sedef_hero_0 aura heal has a real local effect
+PASS sedef_hero_1 aura damage has a real local effect
+PASS sedef_hero_2 aura armor has a real local effect
+PASS filiz_hero_0 aura heal has a real local effect
+PASS filiz_hero_1 aura range has a real local effect
+PASS filiz_hero_2 aura speed has a real local effect
+PASS koz_hero_0 aura armor has a real local effect
+PASS koz_hero_1 aura damage has a real local effect
+PASS koz_hero_2 aura range has a real local effect
+PASS pus_hero_0 aura speed has a real local effect
+PASS pus_hero_1 aura damage has a real local effect
+PASS pus_hero_2 aura vision has a real local effect
+PASS yel_hero_0 aura speed has a real local effect
+PASS yel_hero_1 aura damage has a real local effect
+PASS yel_hero_2 aura heal has a real local effect
+PASS prizma_hero_0 aura cooldown has a real local effect
+PASS prizma_hero_1 aura vision has a real local effect
+PASS prizma_hero_2 aura damage has a real local effect
+PASS sedef power repairs and protects buildings
+PASS sedef economy power pays for owned outposts
+PASS sedef damage power displaces enemy battalions
+PASS filiz protection regenerates actual health
+PASS filiz economy raises income for its duration
+PASS koz protection repairs only buildings
+PASS koz economy accelerates an existing production queue
+PASS koz damage power has a distinct building multiplier
+PASS pus economy grants gold when a real kill occurs
+PASS yel protection strengthens cavalry without buffing infantry
+PASS yel economy converts actual combat damage into gold
+PASS yel damage power also stuns moving enemies
+PASS prizma protection reflects real damage to its attacker
+PASS prizma economy advances active hero cooldowns
+PASS prizma damage dispels protection before applying damage
+PASS sedef summon power creates its authored roster
+PASS filiz summon power creates its authored roster
+PASS koz summon power creates its authored roster
+PASS pus summon power creates its authored roster
+PASS yel summon power creates its authored roster
+PASS prizma summon power creates its authored roster
+PASS filiz damage power leaves a damaging poison
+PASS pus damage power leaves a damaging poison
+PASS pus protection changes actual movement speed
+PASS koz summoned siege has its own protection
+PASS prizma summons copy a cavalry battalion instead of a fixed infantry type
+PASS kolay AI uses repaired building powers on damaged friendly structures
+PASS normal AI uses repaired building powers on damaged friendly structures
+PASS zor AI uses repaired building powers on damaged friendly structures
+PASS kolay AI reserves its affordable first production for the observed counter
+PASS normal AI reserves its affordable first production for the observed counter
+PASS zor AI reserves its affordable first production for the observed counter
+PASS finished state is independent of caller step size
+PASS snapshot at 300 preserves three full match outcomes
+PASS formation: selected battalions receive separate role-aware destinations
+PASS formation: changing selection order preserves orders and events
+PASS formation: the group arrives spread out around its destination
+PASS formation: identical starting positions separate deterministically without RNG
+PASS formation: separation treats stunned battalions as fixed obstacles
+PASS formation: edge destinations remain inside the map
+PASS formation: retreat keeps the selected army in distinct home slots
+PASS formation: duplicate selected ids are rejected
+PASS formation: soldier layouts keep each battalion a multi-figure group
+PASS formation: heading rotates figure ranks with the battalion
+PASS formation: a team cannot query hidden enemy soldier positions
+PASS formation: active group orders and separation survive JSON restore
+PASS audio events retain faction, role and source position after a kill
+PASS audio: music uses written chords, bass, melody and detuned pads
+PASS audio: battle adds paired heartbeat without replacing the score
+PASS audio: music graph has a filtered, bounded echo feedback loop
+PASS audio: faction combat profiles have six different voice signatures
+PASS audio: construction includes noise and several timed impacts
+PASS audio: ranged and siege attacks have distinct envelopes and spectra
+PASS audio: faction cries use layered formant filters
+PASS audio: moving cavalry schedules hoofbeats with a faction gait
+PASS audio: spatial attenuation falls with distance and culls far events
+PASS audio: stereo panning follows screen direction
+PASS audio: every simulation event category has an audible cue
+PASS audio: a burst is rate limited and has a strict voice budget
+PASS audio: sound/music toggles and master mute control their own buses
+PASS audio: pause stops new effects and new scheduled beats
+PASS audio: resume after a long gap schedules current music without a catch-up burst
+PASS audio: explicit music stop remains stopped until restarted
+PASS audio: the mobile unlock stream is a valid local PCM wave
+PASS audio: gesture unlock resumes the context and plays an inline silent media element
+PASS audio: disposal stops playback and releases the graph
+PASS audio: the composed preview contains finite non-silent bounded PCM
+PASS audio: faction music colors change actual PCM output
+TESTS passed=284 failed=0

@@ -1,0 +1,16 @@
+GÖLGE KUŞATMASI (The Battle for Middle-earth Esintili Web Oyunu)
+Kabul Edilen Resmi Teslimat Paketi
+
+--- ÇALIŞTIRMA TALİMATI (macOS) ---
+
+1. YÖNTEM (En Kolay):
+   Klasör içindeki "Oyunu Başlat.command" dosyasına çift tıklayın.
+   - Otomatik olarak boş bir port bulup yerel sunucuyu açar.
+   - Varsayılan tarayıcınızda oyunu başlatır.
+
+2. YÖNTEM (Terminal Üzerinden):
+   Terminal uygulamasını açıp bu klasörün dizinine gelin ve şu komutu çalıştırın:
+   python3 -m http.server 8000
+   Ardından tarayıcınızdan http://localhost:8000 adresini açın.
+
+* Oyunu kapatmak için açık olan Terminal penceresini kapatmanız yeterlidir.

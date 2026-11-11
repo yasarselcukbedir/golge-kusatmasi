@@ -1,0 +1,92 @@
+{
+  "detected": 5,
+  "survived": 0,
+  "results": [
+    {
+      "mutation": "ability_range",
+      "detected": true,
+      "passed": 278,
+      "failed": 6,
+      "failing_assertions": [
+        "FAIL sedef each ability rejects visible points outside its range :: Expected values to be strictly equal:",
+        "FAIL filiz each ability rejects visible points outside its range :: Expected values to be strictly equal:",
+        "FAIL koz each ability rejects visible points outside its range :: Expected values to be strictly equal:",
+        "FAIL pus each ability rejects visible points outside its range :: Expected values to be strictly equal:",
+        "FAIL yel each ability rejects visible points outside its range :: Expected values to be strictly equal:",
+        "FAIL prizma each ability rejects visible points outside its range :: Expected values to be strictly equal:"
+      ]
+    },
+    {
+      "mutation": "camp_gold",
+      "detected": true,
+      "passed": 283,
+      "failed": 1,
+      "failing_assertions": [
+        "FAIL neutral camp cleared by combat grants gold and XP once :: Expected values to be strictly equal:"
+      ]
+    },
+    {
+      "mutation": "population_cap",
+      "detected": true,
+      "passed": 278,
+      "failed": 6,
+      "failing_assertions": [
+        "FAIL sedef live and queued population share the cap :: Expected values to be strictly equal:",
+        "FAIL filiz live and queued population share the cap :: Expected values to be strictly equal:",
+        "FAIL koz live and queued population share the cap :: Expected values to be strictly equal:",
+        "FAIL pus live and queued population share the cap :: Expected values to be strictly equal:",
+        "FAIL yel live and queued population share the cap :: Expected values to be strictly equal:",
+        "FAIL prizma live and queued population share the cap :: Expected values to be strictly equal:"
+      ]
+    },
+    {
+      "mutation": "power_payment",
+      "detected": true,
+      "passed": 260,
+      "failed": 24,
+      "failing_assertions": [
+        "FAIL sedef sedef_power_0 shield actual effect :: power spending",
+        "FAIL sedef sedef_power_1 economy actual effect :: power spending",
+        "FAIL sedef sedef_power_2 damage actual effect :: power spending",
+        "FAIL sedef sedef_power_3 summon actual effect :: power spending",
+        "FAIL filiz filiz_power_0 shield actual effect :: power spending",
+        "FAIL filiz filiz_power_1 economy actual effect :: power spending",
+        "FAIL filiz filiz_power_2 damage actual effect :: power spending",
+        "FAIL filiz filiz_power_3 summon actual effect :: power spending",
+        "FAIL koz koz_power_0 shield actual effect :: power spending",
+        "FAIL koz koz_power_1 economy actual effect :: power spending",
+        "FAIL koz koz_power_2 damage actual effect :: power spending",
+        "FAIL koz koz_power_3 summon actual effect :: power spending",
+        "FAIL pus pus_power_0 shield actual effect :: power spending",
+        "FAIL pus pus_power_1 economy actual effect :: power spending",
+        "FAIL pus pus_power_2 damage actual effect :: power spending",
+        "FAIL pus pus_power_3 summon actual effect :: power spending",
+        "FAIL yel yel_power_0 shield actual effect :: power spending",
+        "FAIL yel yel_power_1 economy actual effect :: power spending",
+        "FAIL yel yel_power_2 damage actual effect :: power spending",
+        "FAIL yel yel_power_3 summon actual effect :: power spending",
+        "FAIL prizma prizma_power_0 shield actual effect :: power spending",
+        "FAIL prizma prizma_power_1 economy actual effect :: power spending",
+        "FAIL prizma prizma_power_2 damage actual effect :: power spending",
+        "FAIL prizma prizma_power_3 summon actual effect :: power spending"
+      ]
+    },
+    {
+      "mutation": "production_payment",
+      "detected": true,
+      "passed": 275,
+      "failed": 9,
+      "failing_assertions": [
+        "FAIL sedef unit production charges exact gold and rejects insufficient gold :: Expected values to be strictly equal:",
+        "FAIL filiz unit production charges exact gold and rejects insufficient gold :: Expected values to be strictly equal:",
+        "FAIL koz unit production charges exact gold and rejects insufficient gold :: Expected values to be strictly equal:",
+        "FAIL pus unit production charges exact gold and rejects insufficient gold :: Expected values to be strictly equal:",
+        "FAIL yel unit production charges exact gold and rejects insufficient gold :: Expected values to be strictly equal:",
+        "FAIL prizma unit production charges exact gold and rejects insufficient gold :: Expected values to be strictly equal:",
+        "FAIL kolay AI reserves its affordable first production for the observed counter :: Expected values to be strictly equal:",
+        "FAIL normal AI reserves its affordable first production for the observed counter :: Expected values to be strictly equal:",
+        "FAIL zor AI reserves its affordable first production for the observed counter :: Expected values to be strictly equal:"
+      ]
+    }
+  ]
+}

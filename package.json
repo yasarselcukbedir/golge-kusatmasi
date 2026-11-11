@@ -1,0 +1,1 @@
+{"name":"golge-kusatmasi-simulation","private":true,"type":"module","version":"1.0.0","scripts":{"test":"node tests/run-tests.mjs","catalog":"node tools/sim-cli.mjs catalog"}}

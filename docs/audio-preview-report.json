@@ -1,0 +1,19 @@
+{
+  "original_procedural_score": true,
+  "bpm": 76,
+  "seconds": 18,
+  "sample_rate": 22050,
+  "channels": 1,
+  "peak": 0.1535262018442154,
+  "rms": 0.038619625496194306,
+  "clipped_samples": 0,
+  "features": [
+    "detuned_chord_pads",
+    "melody",
+    "bass",
+    "lowpass_filters",
+    "echo",
+    "battle_heartbeat"
+  ],
+  "generated_by": "node deliverable/game/tools/render-audio-preview.mjs"
+}
