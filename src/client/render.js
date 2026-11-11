@@ -29,6 +29,9 @@ export class Battlefield {
     this.figureRotation = new THREE.Quaternion(); this.partRotation = new THREE.Quaternion(); this.up = new THREE.Vector3(0,1,0);
     this.tints = new Map(); this.geometry = new Map(); this.materials = new Map(); this.batches = new Map(); this.buildings = new Map(); this.positions = new Map();
     this.effects = []; this.effectPool = []; this.lastKnown = new Map(); this.lastTime = 0; this.view = null; this.selected = new Set();
+    // Battle presentation state. Purely cosmetic: nothing here feeds back into the simulation.
+    this.clock = 0; this.frameDt = 0; this.combat = new Map(); this.figures = new Map(); this.projectiles = []; this.particles = []; this.fallen = []; this.pending = [];
+    this.shake = 0; this.fxColor = new THREE.Color(); this.fxQuat = new THREE.Quaternion(); this.fxDir = new THREE.Vector3(); this.axisX = new THREE.Vector3(1,0,0); this.axisZ = new THREE.Vector3(0,0,1); this.leanQ = new THREE.Quaternion(); this.factionHex = new Map();
     this.worldFog = new WorldFog(THREE);
     this.fogSize = new THREE.Vector2(640,420);
     this.scene.add(new THREE.HemisphereLight(0xc8e0e0,0x4c5136,2.3));
@@ -65,6 +68,7 @@ export class Battlefield {
     else if (name === 'bow') g = new THREE.TorusGeometry(1,0.13,3,8,Math.PI);
     else if (name === 'torus') g = new THREE.TorusGeometry(1,0.12,4,10);
     else if (name === 'bar') g = new THREE.PlaneGeometry(1,1);
+    else if (name === 'disc') { g = new THREE.CircleGeometry(1,20); g.rotateX(-Math.PI/2); }
     else if (name === 'ring' || name === 'thinRing') { g = new THREE.RingGeometry(name === 'ring'?0.85:0.98,1,40); g.rotateX(-Math.PI/2); }
     else throw Error('Bilinmeyen çizim şekli');
     this.geometry.set(name,g); return g;
@@ -105,6 +109,25 @@ export class Battlefield {
       mesh.castShadow = !basic; mesh.receiveShadow = !basic; if (basic) mesh.renderOrder = 5;
       this.entityLayer.add(mesh); this.batches.set(name,{mesh,count:0,capacity});
     }
+    const additive = () => new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,side:THREE.DoubleSide});
+    const fx = {fx_spark:['box',additive(),1400],fx_glow:['ball',additive(),260],fx_pillar:['round',additive(),64],fx_disc:['disc',additive(),160],
+      fx_dust:['ball',new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0.3,depthWrite:false}),420],
+      fx_arrow:['round',this.fogMaterial('fx-solid',0xffffff),420],fx_chunk:['box',this.fogMaterial('fx-solid',0xffffff),260]};
+    for (const [name,[shape,material,capacity]] of Object.entries(fx)) {
+      const mesh = new THREE.InstancedMesh(this.geo(shape),material,capacity);
+      mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage); mesh.setColorAt(0,color(0xffffff)); mesh.count = 0; mesh.frustumCulled = false;
+      mesh.renderOrder = name === 'fx_arrow' || name === 'fx_chunk' ? 0 : 6;
+      this.entityLayer.add(mesh); this.batches.set(name,{mesh,count:0,capacity});
+    }
+  }
+  // Like instance(), but writes an arbitrary brightness so additive effects can fade per instance.
+  fx(name, x,y,z,sx,sy,sz,hex,intensity = 1,rotation = null) {
+    const batch = this.batches.get(name); if (!batch || batch.count >= batch.capacity) return;
+    this.dummy.position.set(x,y,z); this.dummy.scale.set(sx,sy,sz);
+    if (rotation?.isQuaternion) this.dummy.quaternion.copy(rotation);
+    else this.dummy.rotation.set(rotation?.x||0,rotation?.y||0,rotation?.z||0);
+    this.dummy.updateMatrix(); this.fxColor.setHex(hex).multiplyScalar(intensity);
+    batch.mesh.setMatrixAt(batch.count,this.dummy.matrix); batch.mesh.setColorAt(batch.count,this.fxColor); batch.count++;
   }
   instance(name, x,y,z,sx,sy,sz,tint, rotation = null) {
     const batch = this.batches.get(name); if (!batch || batch.count >= batch.capacity) return;
@@ -267,21 +290,133 @@ export class Battlefield {
     this.rangeRing.visible=!!origin;
     if(origin){this.rangeRing.position.set(origin.x,this.height(origin.x,origin.y)+.6,origin.y);this.rangeRing.scale.setScalar(mode.range||100);}
   }
-  effect(type,x,y,tint=0xf3d290) {
+  effect(type,x,y,tint=0xf3d290,max=null) {
     if(this.effects.length>=48||!Number.isFinite(x)||!Number.isFinite(y))return;
     let mesh=this.effectPool.pop();
     if(!mesh){mesh=new THREE.Mesh(this.geo('ring'),new THREE.MeshBasicMaterial({transparent:true,opacity:1,depthWrite:false,side:THREE.DoubleSide}));this.effectLayer.add(mesh);}
     mesh.visible=true;mesh.material.color.setHex(tint);mesh.position.set(x,this.height(x,y)+1.4,y);
-    this.effects.push({mesh,age:0,duration:type==='power'?1.6:type==='death'?.8:.65,max:type==='power'?58:type==='ability'?43:type==='order'?10:6});
+    this.effects.push({mesh,age:0,duration:type==='power'?1.6:type==='death'?.8:.65,max:max??(type==='power'?58:type==='ability'?43:type==='order'?10:6)});
+  }
+  // ---- battle presentation -------------------------------------------------
+  fxScale(){return this.quality==='dusuk'?.5:this.quality==='orta'?.8:1;}
+  hexOf(factionId,fallback=0xf3d290){
+    if(!factionId)return fallback;
+    if(!this.factionHex.has(factionId)){const f=this.catalog.factions.find(f=>f.id===factionId);this.factionHex.set(factionId,f?color(f.color).getHex():fallback);}
+    return this.factionHex.get(factionId);
+  }
+  particle(kind,x,y,z,vx,vy,vz,life,size,hex,gravity=0,extra=0){
+    if(this.particles.length>=900)return;
+    this.particles.push({kind,x,y,z,vx,vy,vz,age:0,life,size,hex,gravity,extra,spin:Math.random()*6});
+  }
+  burst(x,y,z,count,speed,hex,size=1,life=.35,lift=.6){
+    const n=Math.max(1,Math.round(count*this.fxScale()));
+    for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=speed*(.45+Math.random()*.75);this.particle('spark',x,y,z,Math.cos(a)*v,speed*lift*(.3+Math.random()),Math.sin(a)*v,life*(.6+Math.random()*.7),size,hex,26);}
+  }
+  dust(x,z,count,spread=3,hex=0xb9a888,size=2.4){
+    const n=Math.max(1,Math.round(count*this.fxScale())),y=this.height(x,z)+.8;
+    for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,d=Math.random()*spread;this.particle('dust',x+Math.cos(a)*d,y,z+Math.sin(a)*d,Math.cos(a)*2.5,1.6+Math.random()*2,Math.sin(a)*2.5,.7+Math.random()*.6,size*(.7+Math.random()*.7),hex);}
+  }
+  chunks(x,z,count,hex,speed=22){
+    const n=Math.max(2,Math.round(count*this.fxScale())),y=this.height(x,z)+2;
+    for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,v=speed*(.3+Math.random()*.7);this.particle('chunk',x,y,z,Math.cos(a)*v,14+Math.random()*16,Math.sin(a)*v,.9+Math.random()*.5,.8+Math.random()*1.1,hex,46);}
+  }
+  pillar(x,z,hex,radius,height,life=.8){this.particle('pillar',x,this.height(x,z),z,0,0,0,life,radius,hex,0,height);}
+  flash(x,z,hex,size,life=.22,y=3){this.particle('glow',x,this.height(x,z)+y,z,0,0,0,life,size,hex);}
+  later(delay,fn){if(this.pending.length<200)this.pending.push({at:this.clock+delay,fn});}
+  shoot(kind,x0,z0,x1,z1,hex,delay,onHit){
+    if(this.projectiles.length>=160)return;
+    const d=Math.hypot(x1-x0,z1-z0),siege=kind==='stone';
+    this.projectiles.push({kind,x0,z0,y0:this.height(x0,z0)+(siege?7:5),x1,z1,y1:this.height(x1,z1)+(siege?1:3),age:-delay,duration:clamp(d/(siege?62:105),.28,siege?1.25:.75),arc:d*(siege?.32:.14),hex,onHit,trail:0});
+  }
+  impact(kind,x,z,hex){
+    const y=this.height(x,z);
+    if(kind==='stone'){
+      this.flash(x,z,0xffb45a,9,.35,4);this.flash(x,z,0xfff0c0,5,.18,4);this.burst(x,y+2,z,16,34,0xffc27a,1.1,.5,.9);
+      this.chunks(x,z,9,0x6b5d4c);this.dust(x,z,9,6,0x9c8c72,3.4);this.effect('death',x,z,0xffc890,17);this.shake=Math.max(this.shake,.9);
+    }else if(kind==='arrow'){this.burst(x,y+4,z,4,16,0xf6e6c2,1.1,.24,.6);this.dust(x,z,1,1.5,0xb9a888,1.6);}
+    else if(kind==='bolt'){this.flash(x,z,hex,6.5,.28,5);this.burst(x,y+4,z,11,28,hex,1.4,.4,.8);this.effect('death',x,z,hex,8);}
+    else{this.flash(x,z,0xfff1cf,kind==='hero'?6:3.8,.14,5);this.burst(x,y+5,z,kind==='hero'?12:7,kind==='hero'?30:22,0xffe2a2,kind==='hero'?1.6:1.25,.28,.9);if(kind==='hero')this.effect('death',x,z,0xffe2a2,10);}
+  }
+  onAttack(event,attacker,target){
+    const tx=event.x,tz=event.y,sx=event.sourceX??attacker?.x,sz=event.sourceY??attacker?.y,delay=Math.random()*.2;
+    if(!Number.isFinite(tx)||!Number.isFinite(tz))return;
+    const known=Number.isFinite(sx)&&Number.isFinite(sz),d=known?Math.hypot(tx-sx,tz-sz):0,role=event.role,hero=event.kind==='hero';
+    const tint=this.hexOf(event.faction,0xe9dcc0);
+    const mark=(id,key,at)=>{if(id==null)return;let c=this.combat.get(id);if(!c){c={attackAt:-9,hitAt:-9};this.combat.set(id,c);}c[key]=at;};
+    mark(event.id,'attackAt',this.clock+delay);
+    const ranged=known&&(role==='ranged'||role==='siege'||d>16);
+    if(!ranged){
+      const k=known?.72:1,cx=known?sx+(tx-sx)*k:tx,cz=known?sz+(tz-sz)*k:tz;
+      this.later(delay+.13,()=>{this.impact(hero?'hero':'melee',cx+(Math.random()-.5)*3,cz+(Math.random()-.5)*3,tint);mark(event.target,'hitAt',this.clock);if(role==='cavalry')this.dust(cx,cz,2,2);});
+      return;
+    }
+    if(role==='siege'){
+      this.flash(sx,sz,0xffd9a0,3,.15,6);this.dust(sx,sz,2,2);
+      this.shoot('stone',sx,sz,tx+(Math.random()-.5)*5,tz+(Math.random()-.5)*5,0x5d5346,delay,(x,z)=>{this.impact('stone',x,z,tint);mark(event.target,'hitAt',this.clock);});
+      return;
+    }
+    const magic=hero||role==='special',figure=this.figures.get(event.id),shots=magic?1:Math.max(2,Math.round(5*this.fxScale()));
+    for(let i=0;i<shots;i++){
+      const from=figure&&figure.n?figure.pts[i%figure.n]:null,fx=from?from.x:sx+(Math.random()-.5)*5,fz=from?from.z:sz+(Math.random()-.5)*5;
+      this.shoot(magic?'bolt':'arrow',fx,fz,tx+(Math.random()-.5)*6,tz+(Math.random()-.5)*6,magic?tint:0xd9c9a3,delay+i*.045,(x,z)=>{this.impact(magic?'bolt':'arrow',x,z,tint);if(i===0)mark(event.target,'hitAt',this.clock);});
+    }
+  }
+  dropFigure(parts,x,z,rotation,delay=0){
+    if(this.fallen.length>=70)this.fallen.shift();
+    this.fallen.push({parts,x,z,rotation,age:-delay,side:Math.random()<.5?-1:1,twist:(Math.random()-.5)*.9});
+  }
+  onDeath(event){
+    const x=event.x,z=event.y;if(!Number.isFinite(x)||!Number.isFinite(z))return;
+    const tint=this.hexOf(event.faction,0xb9a17d),figure=this.figures.get(event.id);
+    if(figure){for(let i=0;i<figure.n;i++)this.dropFigure(figure.parts,figure.pts[i].x,figure.pts[i].z,figure.rotation,Math.random()*.3);this.figures.delete(event.id);}
+    this.combat.delete(event.id);
+    if(event.kind==='building'){
+      this.flash(x,z,0xffb45a,15,.5,8);this.flash(x,z,0xfff0c0,8,.25,8);this.chunks(x,z,18,0x6f6456,30);this.chunks(x,z,6,tint,24);
+      this.dust(x,z,16,13,0x8f8068,4.6);this.burst(x,this.height(x,z)+6,z,24,40,0xffc27a,1.3,.7,1);this.effect('death',x,z,0xffb070,30);this.shake=Math.max(this.shake,1.5);
+    }else if(event.kind==='hero'){
+      this.pillar(x,z,tint,3.2,46,1.1);this.flash(x,z,tint,8,.5,5);this.burst(x,this.height(x,z)+5,z,20,26,tint,1,.8,1.2);this.dust(x,z,6,4);this.effect('death',x,z,tint,24);this.shake=Math.max(this.shake,.7);
+    }else{this.dust(x,z,7,6,0xb9a888,3);this.burst(x,this.height(x,z)+4,z,9,20,tint,1.2,.5,1);this.effect('death',x,z,0xff8063,12);}
   }
   handleEvents(events) {
     for(const event of events){
       const e=this.view.entities.find(e=>e.id===event.id)||this.lastKnown.get(event.id),target=this.view.entities.find(e=>e.id===event.target)||this.lastKnown.get(event.target);
+      if(event.type==='attack'){this.onAttack(event,e,target);continue;}
+      if(event.type==='death'){this.onDeath(event);continue;}
       const p=Number.isFinite(event.x)?event:target||e||this.view.outposts.find(p=>p.id===event.outpost)||this.view.camps.find(p=>p.id===event.camp);
-      if (p&&['attack','death','ability','power','level','capture'].includes(event.type)) this.effect(event.type,p.x,p.y,event.type==='attack'?0xffe2a2:event.type==='death'?0xff8063:event.type==='level'?0xffe599:0x90e3d3);
+      if(!p||!['ability','power','level','capture','camp'].includes(event.type))continue;
+      const x=p.x,z=p.y,y=this.height(x,z),tint=this.hexOf(event.faction,0x90e3d3);
+      if(event.type==='ability'){
+        this.pillar(x,z,tint,3.4,38,.75);this.flash(x,z,tint,7,.3,4);this.burst(x,y+3,z,16,30,tint,1,.55,.8);this.effect('ability',x,z,tint);this.later(.14,()=>this.effect('ability',x,z,0xffffff,26));
+      }else if(event.type==='power'){
+        this.pillar(x,z,tint,8,70,1.2);this.pillar(x,z,0xffffff,3,70,.5);this.flash(x,z,tint,16,.5,6);this.particle('disc',x,y+.9,z,0,0,0,2.2,30,tint);
+        this.burst(x,y+4,z,30,46,tint,1.3,.8,1);this.dust(x,z,10,14,0x9c8c72,4);this.effect('power',x,z,tint);this.later(.22,()=>this.effect('power',x,z,0xffffff,40));this.shake=Math.max(this.shake,1.2);
+      }else if(event.type==='level'){
+        this.pillar(x,z,0xffd36a,1.8,30,.9);this.effect('level',x,z,0xffe599,13);
+        const n=Math.round(12*this.fxScale());for(let i=0;i<n;i++){const a=i/n*Math.PI*2;this.particle('spark',x+Math.cos(a)*3,y+1,z+Math.sin(a)*3,Math.cos(a)*5,20+Math.random()*10,Math.sin(a)*5,.9,.8,0xffe08a,14);}
+      }else{
+        this.pillar(x,z,tint,2.4,34,1);this.effect('capture',x,z,tint,22);this.burst(x,y+10,z,14,16,tint,.9,.8,1.2);
+      }
     }
   }
-  clearEffects() {for(const e of this.effects){e.mesh.visible=false;this.effectPool.push(e.mesh);}this.effects=[];}
+  clearEffects() {
+    for(const e of this.effects){e.mesh.visible=false;this.effectPool.push(e.mesh);}this.effects=[];
+    this.projectiles=[];this.particles=[];this.fallen=[];this.pending=[];this.combat.clear();this.figures.clear();this.shake=0;
+  }
+  // Draw one prepared figure, optionally leaning about its own X axis (lunges, falling bodies).
+  figure(parts,x,y,z,rotation,lean,tint,intensity,scale=1) {
+    const c=Math.cos(rotation),s=Math.sin(rotation),lc=Math.cos(lean),ls=Math.sin(lean);
+    this.figureRotation.setFromAxisAngle(this.up,rotation);
+    if(lean){this.leanQ.setFromAxisAngle(this.axisX,lean);this.figureRotation.multiply(this.leanQ);}
+    for(const part of parts){
+      if(part.detail&&this.quality==='dusuk')continue;
+      let [px,py,pz]=part.position;
+      if(lean){const ny=py*lc-pz*ls,nz=py*ls+pz*lc;py=ny;pz=nz;}
+      px*=scale;py*=scale;pz*=scale;
+      this.partRotation.copy(this.figureRotation).multiply(part.quaternion);
+      if(tint===null&&intensity===1)this.instance('part_'+part.shape,x+px*c+pz*s,y+py,z-px*s+pz*c,part.scale[0]*scale,part.scale[1]*scale,part.scale[2]*scale,part.color,this.partRotation);
+      else this.fx('part_'+part.shape,x+px*c+pz*s,y+py,z-px*s+pz*c,part.scale[0]*scale,part.scale[1]*scale,part.scale[2]*scale,tint??part.color,intensity,this.partRotation);
+    }
+  }
   soldier(e,pos,index,time) {
     const faction=e.player>=0?this.catalog.factions.find(f=>f.id===this.view.players[e.player].faction):null;
     const definition=(e.kind==='hero'?faction?.heroes:faction?.units)?.find(u=>u.id===e.type),model=this.modelFor(e),parts=this.preparedModel(model);
@@ -291,21 +426,75 @@ export class Battlefield {
     if(!total)return;
     // Sim headings face +X; the models face local +Z. Only local rank spacing
     // is enlarged to fit the authored models; the battalion center is untouched.
-    const rotation=Math.PI/2-slots[0].heading,c=Math.cos(rotation),s=Math.sin(rotation),spread=e.role==='cavalry'?1.5:e.role==='special'?1.3:1.8;
-    this.figureRotation.setFromAxisAngle(this.up,rotation);
+    const heading=slots[0].heading,rotation=Math.PI/2-heading,spread=e.role==='cavalry'?1.5:e.role==='special'?1.3:1.8;
+    const fx=Math.cos(heading),fz=Math.sin(heading),state=this.combat.get(e.id);
+    const sinceAttack=state?this.clock-state.attackAt:99,sinceHit=state?this.clock-state.hitAt:99,fighting=sinceAttack<1.7;
+    const reach=e.role==='cavalry'?4.6:e.role==='ranged'?-1:e.role==='siege'?-2:e.kind==='hero'?3.8:3;
+    const hurt=sinceHit>=0&&sinceHit<.16,recoil=hurt?(1-sinceHit/.16)*1.6:0;
+    let record=this.figures.get(e.id);
+    if(!record){record={n:0,pts:[],parts,rotation};this.figures.set(e.id,record);}
+    // Soldiers lost since the last frame fall where they stood instead of vanishing.
+    if(record.n>total&&e.kind!=='hero')for(let i=total;i<record.n;i++)this.dropFigure(record.parts,record.pts[i].x,record.pts[i].z,record.rotation,Math.random()*.12);
+    record.parts=parts;record.rotation=rotation;record.seen=this.clock;
+    if(moving&&(e.role==='cavalry'||e.role==='siege')&&Math.random()<this.frameDt*5)this.dust(pos.x-fx*3,pos.y-fz*3,1,2,0xb9a888,1.8);
     for(let i=0;i<total;i++){
-      const slot=slots[i],x=pos.x+(slot.x-e.x)*spread,z=pos.y+(slot.y-e.y)*spread,y=this.height(x,z)+(moving?Math.sin(time*10+i)*.18:0);
-      for(const part of parts){
-        if(part.detail&&this.quality==='dusuk')continue;
-        const [px,py,pz]=part.position;
-        this.partRotation.copy(this.figureRotation).multiply(part.quaternion);
-        this.instance('part_'+part.shape,x+px*c+pz*s,y+py,z-px*s+pz*c,...part.scale,part.color,this.partRotation);
-      }
+      const slot=slots[i],local=sinceAttack-i*.04,striking=local>0&&local<.36,swing=striking?Math.sin(Math.PI*local/.36):0;
+      const push=swing*reach-recoil;
+      const x=pos.x+(slot.x-e.x)*spread+fx*push,z=pos.y+(slot.y-e.y)*spread+fz*push;
+      const hop=moving?Math.sin(time*10+i)*.18:fighting?Math.abs(Math.sin(time*8+i*1.7))*.14:0,y=this.height(x,z)+hop;
+      const lean=reach>0?swing*.32-recoil*.16:-swing*.12-recoil*.16;
+      this.figure(parts,x,y,z,rotation,lean,hurt?0xfff3df:null,hurt?1.25:1);
+      let pt=record.pts[i];if(!pt){pt={x,z};record.pts[i]=pt;}else{pt.x=x;pt.z=z;}
     }
+    record.n=total;
+  }
+  drawBattle(dt) {
+    // Fallen soldiers: tip over, lie for a moment, then sink into the ground.
+    for(let i=this.fallen.length-1;i>=0;i--){
+      const f=this.fallen[i];f.age+=dt;
+      if(f.age>1.7){this.fallen.splice(i,1);continue;}
+      const t=Math.max(0,f.age),tip=Math.min(1,t/.34),sink=t>1.05?(t-1.05)/.65:0;
+      this.figure(f.parts,f.x,this.height(f.x,f.z)-sink*2.6+Math.sin(tip*Math.PI)*.5,f.z,f.rotation+f.twist*tip,-f.side*tip*tip*1.45,null,.62-sink*.3,1-sink*.25);
+    }
+    // Arrows, bolts and siege stones travel on arcs and leave their own impact.
+    for(let i=this.projectiles.length-1;i>=0;i--){
+      const p=this.projectiles[i];p.age+=dt;if(p.age<0)continue;
+      const k=p.age/p.duration;
+      if(k>=1){this.projectiles.splice(i,1);p.onHit?.(p.x1,p.z1);continue;}
+      const x=p.x0+(p.x1-p.x0)*k,z=p.z0+(p.z1-p.z0)*k,y=p.y0+(p.y1-p.y0)*k+Math.sin(Math.PI*k)*p.arc;
+      this.fxDir.set(p.x1-p.x0,(p.y1-p.y0)+Math.cos(Math.PI*k)*Math.PI*p.arc,p.z1-p.z0).normalize();
+      this.fxQuat.setFromUnitVectors(this.up,this.fxDir);
+      if(p.kind==='arrow')this.fx('fx_arrow',x,y,z,.16,4.6,.16,p.hex,1,this.fxQuat);
+      else if(p.kind==='bolt'){this.fx('fx_glow',x,y,z,2.2,2.2,2.2,p.hex,1);this.fx('fx_glow',x,y,z,1.1,1.1,1.1,0xffffff,1);p.trail+=dt;if(p.trail>.03){p.trail=0;this.particle('spark',x,y,z,(Math.random()-.5)*4,(Math.random()-.5)*4,(Math.random()-.5)*4,.25,.6,p.hex,0);}}
+      else{this.fx('fx_chunk',x,y,z,2.4,2.4,2.4,p.hex,1,{x:p.age*7,y:p.age*5,z:0});p.trail+=dt;if(p.trail>.05){p.trail=0;this.particle('dust',x,y,z,0,.5,0,.5,1.5,0x8f8068);}}
+    }
+    for(let i=this.particles.length-1;i>=0;i--){
+      const p=this.particles[i];p.age+=dt;const k=p.age/p.life;
+      if(k>=1){this.particles.splice(i,1);continue;}
+      p.vy-=p.gravity*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;
+      if(p.kind==='spark'){
+        const speed=Math.hypot(p.vx,p.vy,p.vz)||1;this.fxDir.set(p.vx/speed,p.vy/speed,p.vz/speed);this.fxQuat.setFromUnitVectors(this.axisZ,this.fxDir);
+        this.fx('fx_spark',p.x,p.y,p.z,p.size*.28,p.size*.28,p.size*(1.2+speed*.07),p.hex,1-k,this.fxQuat);
+      }else if(p.kind==='dust'){
+        const ground=this.height(p.x,p.z)+.4;if(p.y<ground)p.y=ground;p.vx*=1-dt*2.5;p.vz*=1-dt*2.5;p.vy*=1-dt*1.5;
+        const size=p.size*(.5+k*1.5)*(k>.6?(1-k)/.4:1);this.fx('fx_dust',p.x,p.y,p.z,size,size*.7,size,p.hex,1);
+      }else if(p.kind==='chunk'){
+        const ground=this.height(p.x,p.z)+.4;if(p.y<ground){p.y=ground;p.vy=Math.abs(p.vy)*.3;p.vx*=.5;p.vz*=.5;}
+        this.fx('fx_chunk',p.x,p.y,p.z,p.size,p.size,p.size,p.hex,1,{x:p.spin+p.age*8,y:p.spin+p.age*6,z:0});
+      }else if(p.kind==='glow'){const size=p.size*(.45+k*.9);this.fx('fx_glow',p.x,p.y,p.z,size,size,size,p.hex,(1-k)*(1-k));}
+      else if(p.kind==='pillar'){const radius=p.size*(1-k*.55),height=p.extra*(.55+.45*Math.min(1,k*5));this.fx('fx_pillar',p.x,p.y+height/2,p.z,radius,height,radius,p.hex,(1-k)*.75);}
+      else if(p.kind==='disc'){const size=p.size*(.6+.4*Math.min(1,k*6));this.fx('fx_disc',p.x,p.y,p.z,size,1,size,p.hex,(1-k)*.45);}
+    }
+    // Forget presentation records of units that left sight a while ago.
+    if(this.figures.size>40)for(const [id,record] of this.figures)if(this.clock-record.seen>4){this.figures.delete(id);this.combat.delete(id);}
   }
   draw(dt,time) {
     if(!this.map)return;
-    this.updateCamera();for(const batch of this.batches.values())batch.count=0;
+    this.clock+=dt;this.frameDt=dt;
+    this.updateCamera();
+    if(this.shake>.02&&this.quality!=='dusuk'){const a=this.shake*1.3;this.camera.position.x+=(Math.random()-.5)*a;this.camera.position.y+=(Math.random()-.5)*a;this.camera.position.z+=(Math.random()-.5)*a;this.shake*=Math.exp(-dt*7);}else this.shake=0;
+    for(const batch of this.batches.values())batch.count=0;
+    for(let i=this.pending.length-1;i>=0;i--)if(this.pending[i].at<=this.clock){const job=this.pending[i];this.pending.splice(i,1);job.fn();}
     const smooth=1-Math.exp(-dt*8);
     if(this.view)for(const e of this.view.entities){
       let p=this.positions.get(e.id);if(!p){p={x:e.x,y:e.y};this.positions.set(e.id,p);}p.x+=(e.x-p.x)*smooth;p.y+=(e.y-p.y)*smooth;
@@ -332,6 +521,7 @@ export class Battlefield {
       }
     }
     if(this.view)for(const post of this.view.outposts){if(post.owner!=null||post.progress>0){const owner=this.view.players[post.owner],tint=owner?this.catalog.factions.find(f=>f.id===owner.faction).color:0xe9d6a1;this.instance('crystal',post.x,this.height(post.x,post.y)+14,post.y,3,5+Math.sin(time*2),3,tint,{y:time*.5});if(post.progress>0)this.instance('ring',post.x,1,post.y,14+post.progress,1,14+post.progress,0xf3d697);}}
+    this.drawBattle(dt);
     for(const batch of this.batches.values()){batch.mesh.count=batch.count;if(batch.count){batch.mesh.instanceMatrix.needsUpdate=true;if(batch.mesh.instanceColor)batch.mesh.instanceColor.needsUpdate=true;}}
     for(let i=this.effects.length-1;i>=0;i--){const e=this.effects[i];e.age+=dt;const k=e.age/e.duration;if(k>=1){e.mesh.visible=false;this.effectPool.push(e.mesh);this.effects.splice(i,1);}else{e.mesh.scale.setScalar(1+e.max*k);e.mesh.material.opacity=(1-k)*.8;}}
     this.renderer.render(this.scene,this.camera);

@@ -1,5 +1,5 @@
 // Static shell and the single pinned rendering dependency are cached atomically.
-const CACHE = 'gk-shell-v1.4.0-3a4b4eb4';
+const CACHE = 'gk-shell-v1.4.0-3a39c2e6';
 const THREE_URL = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 const PRECACHE = [
   "./index.html",

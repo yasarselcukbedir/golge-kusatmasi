@@ -251,4 +251,4 @@ class Game {
     requestAnimationFrame(t=>this.frame(t));
   }
 }
-export function start(){return new Game();}
+export function start(){const game=new Game();if(new URLSearchParams(location.search).has('debug'))window.__gkGame=game;return game;}
