@@ -1,4 +1,6 @@
-# Gölge Kuşatması
+# Beylikler Çağı
+
+> Oyunun önceki adı Gölge Kuşatması’ydı; depo adı ve yayın adresi (`golge-kusatmasi`) kurulu uygulamalar bozulmasın diye aynı kaldı.
 
 > **Anadolu beylikleri sürümü (Kasım 2026):** Taraflar artık Osmanoğulları, Aydınoğulları, Candaroğulları, Germiyanoğulları, Dulkadiroğulları ve Karamanoğulları; kahramanlar bu beyliklerin tarihî beyleri. Kaynaklar Akçe ve Kut olarak adlandırıldı, Çiftlik ile Ağıl gelir yapılarıdır. Taraf kimlikleri `osman, aydin, candar, germiyan, dulkadir, karaman` oldu. `docs/` altındaki raporlar ve bu belgenin aşağıdaki bazı örnekleri önceki adlandırmayı (sedef, filiz, köz, pus, yel, prizma) kullanır.
 

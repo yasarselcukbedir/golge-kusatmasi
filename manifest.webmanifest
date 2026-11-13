@@ -1,7 +1,7 @@
 {
   "id": "./index.html",
-  "name": "Gölge Kuşatması",
-  "short_name": "Kuşatma",
+  "name": "Beylikler Çağı",
+  "short_name": "Beylikler",
   "description": "Altı Anadolu beyliğiyle üç boyutlu gerçek zamanlı strateji oyunu.",
   "start_url": "./index.html",
   "scope": "./",
