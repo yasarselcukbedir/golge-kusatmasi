@@ -29,7 +29,7 @@ export class VisualLibrary {
     if(kind==='escort')model=buildEscortModel();
     else{
       const f=this.catalog.factions.find(f=>f.id===factionId);
-      if(!f){const neutral={...this.catalog.factions.find(f=>f.id==='pus'),color:'#b9a17d'};model=buildBattalionModel(neutral,{id:'neutral',name:'Kamp nöbetçisi',role:'infantry'});}
+      if(!f){const neutral={...this.catalog.factions.find(f=>f.id==='germiyan'),color:'#b9a17d'};model=buildBattalionModel(neutral,{id:'neutral',name:'Kamp nöbetçisi',role:'infantry'});}
       else if(kind==='hero')model=buildHeroModel(f,f.heroes.find(h=>h.id===id));
       else if(kind==='building')model=buildBuildingModel(f,f.buildings.find(b=>b.id===id));
       else model=buildBattalionModel(f,f.units.find(u=>u.id===id));

@@ -5,16 +5,16 @@ export const SCORE = Object.freeze({bpm:76,beatsPerBar:4,
  melody:[69,null,72,76,74,null,71,67,69,72,null,74,76,79,76,null,77,76,72,null,74,71,67,64,69,null,72,71,67,null,64,69]
 });
 export const FACTION_VOICES=Object.freeze({
- sedef:{wave:'triangle',ring:1850,body:145,cry:[185,265],formants:[600,1450,2550],detune:3,hoof:'paired',color:950},
- filiz:{wave:'sine',ring:4100,body:190,cry:[235,345],formants:[750,2000,3100],detune:2,hoof:'light',color:1350},
- koz:{wave:'square',ring:880,body:88,cry:[100,145],formants:[440,900,1700],detune:7,hoof:'wheel',color:620},
- pus:{wave:'sawtooth',ring:2600,body:112,cry:[155,115],formants:[650,1250,2300],detune:12,hoof:'scurry',color:780},
- yel:{wave:'triangle',ring:2150,body:165,cry:[210,295],formants:[700,1600,2600],detune:4,hoof:'gallop',color:1150},
- prizma:{wave:'sine',ring:5200,body:260,cry:[270,395],formants:[900,2200,3300],detune:9,hoof:'glass',color:1650}
+ osman:{wave:'triangle',ring:1850,body:145,cry:[185,265],formants:[600,1450,2550],detune:3,hoof:'paired',color:950},
+ aydin:{wave:'sine',ring:4100,body:190,cry:[235,345],formants:[750,2000,3100],detune:2,hoof:'light',color:1350},
+ candar:{wave:'square',ring:880,body:88,cry:[100,145],formants:[440,900,1700],detune:7,hoof:'wheel',color:620},
+ germiyan:{wave:'sawtooth',ring:2600,body:112,cry:[155,115],formants:[650,1250,2300],detune:12,hoof:'scurry',color:780},
+ dulkadir:{wave:'triangle',ring:2150,body:165,cry:[210,295],formants:[700,1600,2600],detune:4,hoof:'gallop',color:1150},
+ karaman:{wave:'sine',ring:5200,body:260,cry:[270,395],formants:[900,2200,3300],detune:9,hoof:'glass',color:1650}
 });
 export const midiHz=n=>440*2**((n-69)/12);
-export function composeBeat(beat,faction='sedef',battle=0){
- const profile=FACTION_VOICES[faction]||FACTION_VOICES.sedef,seconds=60/SCORE.bpm,voices=[],bar=Math.floor(beat/4)%SCORE.chords.length;
+export function composeBeat(beat,faction='osman',battle=0){
+ const profile=FACTION_VOICES[faction]||FACTION_VOICES.osman,seconds=60/SCORE.bpm,voices=[],bar=Math.floor(beat/4)%SCORE.chords.length;
  if(beat%4===0){
   for(const note of SCORE.chords[bar])for(const sign of [-1,1])voices.push({tag:'pad',wave:'sawtooth',frequency:midiHz(note),detune:sign*(4+profile.detune*.3),duration:seconds*4.35,attack:.48,release:.8,gain:.0055,filter:'lowpass',cutoff:profile.color,send:.06});
   voices.push({tag:'bass',wave:'sine',frequency:midiHz(SCORE.bass[bar]),duration:seconds*3.7,attack:.1,release:.45,gain:.045,filter:'lowpass',cutoff:340});
@@ -26,7 +26,7 @@ export function composeBeat(beat,faction='sedef',battle=0){
  return voices;
 }
 // Used by the offline preview/test tool; same score, envelopes and timbres as the runtime.
-export function renderScore({seconds=18,sampleRate=22050,faction='sedef',battle=.65}={}){
+export function renderScore({seconds=18,sampleRate=22050,faction='osman',battle=.65}={}){
  const samples=new Float32Array(Math.ceil(seconds*sampleRate)),beatSeconds=60/SCORE.bpm;let rng=0x75ab31;
  const random=()=>{rng^=rng<<13;rng^=rng>>>17;rng^=rng<<5;return (rng>>>0)/4294967296*2-1;};
  for(let beat=0;beat*beatSeconds<seconds;beat++)for(const v of composeBeat(beat,faction,battle)){
@@ -61,7 +61,7 @@ export function silentWave(){
 export class AudioSystem{
  constructor(options={}){
   this.settings={volume:.65,sfx:true,music:true,...options.settings,...options};
-  this.ctx=options.context||null;this.listener=null;this.faction='sedef';this.voices=new Set();this.last=new Map();this.hooves=new Map();this.previousPositions=new Map();this.battleUntil=0;this.beat=0;this.nextBeat=0;this.paused=false;this.closed=false;this.unlocked=false;this.timer=null;this.musicRunning=true;this.rng=0x82b5a3;
+  this.ctx=options.context||null;this.listener=null;this.faction='osman';this.voices=new Set();this.last=new Map();this.hooves=new Map();this.previousPositions=new Map();this.battleUntil=0;this.beat=0;this.nextBeat=0;this.paused=false;this.closed=false;this.unlocked=false;this.timer=null;this.musicRunning=true;this.rng=0x82b5a3;
   this.maxVoices=options.maxVoices||72;this.autoSchedule=options.autoSchedule!==false;this.stats={tones:0,noises:0,cries:0,hooves:0,musicBeats:0,dropped:0};
   if(this.ctx)this._graph();if(options.bindGesture!==false)this.bindUnlock(options.document||globalThis.document);
  }
@@ -129,7 +129,7 @@ export class AudioSystem{
  _cry(profile,position){if(!this._gap('cry',2.8))return;this.stats.cries++;for(const [ratio,gain] of [[1,.065],[1.5,.025]])this._voice({frequency:profile.cry[0]*ratio,endFrequency:profile.cry[1]*ratio,wave:'sawtooth',duration:.42,gain,formants:profile.formants,send:.12},position);this.noise(.26,.018,profile.formants[1],.8,position);}
  hoof(entity){
   if(!this.ctx||this.paused||this.settings.sfx===false||!this._gap('hoof:'+entity.id,.32))return;
-  const p=FACTION_VOICES[entity.faction]||FACTION_VOICES.sedef,position={x:entity.x,y:entity.y},at=this.ctx.currentTime;this.stats.hooves++;
+  const p=FACTION_VOICES[entity.faction]||FACTION_VOICES.osman,position={x:entity.x,y:entity.y},at=this.ctx.currentTime;this.stats.hooves++;
   if(p.hoof==='wheel'){this.noise(.23,.055,230,.6,position);this.noise(.045,.04,1100,2,position,.11);}
   else if(p.hoof==='scurry')for(let i=0;i<4;i++)this.noise(.025,.035,2600,3,position,i*.045);
   else if(p.hoof==='glass')for(const d of [0,.12])this._voice({frequency:520,endFrequency:290,wave:'sine',duration:.06,gain:.025},position,'sfx',at+d);
@@ -140,7 +140,7 @@ export class AudioSystem{
   if(Array.isArray(event)){let played=false;for(const e of event)played=this.play(e,context)||played;return played;}
   const e=typeof event==='string'?{type:event,...(typeof context==='object'?context:{volume:context})}:event;if(!e)return false;
   const state=context?.state||context?.entities&&context,unit=state?.entities?.find(u=>u.id===e.id),player=state?.players?.find(p=>p.id===(e.player??unit?.player));
-  const faction=e.faction||player?.faction||this.faction,profile=FACTION_VOICES[faction]||FACTION_VOICES.sedef,role=e.role||unit?.role||'infantry';
+  const faction=e.faction||player?.faction||this.faction,profile=FACTION_VOICES[faction]||FACTION_VOICES.osman,role=e.role||unit?.role||'infantry';
   const position=Number.isFinite(e.sourceX??e.x)?{x:e.sourceX??e.x,y:e.sourceY??e.y}:unit?{x:unit.x,y:unit.y}:null;
   if(spatialMix(position,this.listener).gain<.008)return false;
   const type=({build:'construction',ready:'produced',levelup:'level',die:'death',boom:'siege',select:'tap'})[e.type]||e.type;

@@ -20,5 +20,5 @@ export function loadSettings() {
   return settings;
 }
 export function getProgress(ids) { const saved = read('progress', []); return Array.isArray(saved) ? saved.filter(id => ids.includes(id)) : []; }
-export function saveMatch(sim, client) { return write('autosave', {version:1, savedAt:Date.now(), sim, client}); }
-export function loadMatch() { const saved = read('autosave'); return saved?.version === 1 && typeof saved.sim === 'string' ? saved : null; }
+export function saveMatch(sim, client) { return write('autosave', {version:2, savedAt:Date.now(), sim, client}); }
+export function loadMatch() { const saved = read('autosave'); return saved?.version === 2 && typeof saved.sim === 'string' ? saved : null; }

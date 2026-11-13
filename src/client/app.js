@@ -28,10 +28,10 @@ class Game {
   active() {return !!this.match&&!this.view.paused&&!this.view.ended&&this.ui.screen.hidden&&this.ui.modal.hidden&&!this.fatal;}
   seed() {if(window.crypto?.getRandomValues){return crypto.getRandomValues(new Uint32Array(1))[0];}return Date.now()%2147483647;}
   preview() {
-    const match=createMatch({seed:42,ai:[false,false],factions:['sedef','pus']});
-    for(const [building,x,y] of [['field',40,248],['barracks',100,165],['tower',118,225]])issueCommand(match,{player:0,type:'build',building,x,y});
-    step(match,40);const keep=getState(match).players[0].keepId;issueCommand(match,{player:0,type:'recruitHero',hero:'sedef_hero_0',building:keep});
-    const b=getState(match).entities.find(e=>e.type==='sedef_barracks');if(b)issueCommand(match,{player:0,type:'produce',unit:'sedef_special',building:b.id});
+    const match=createMatch({seed:42,ai:[false,false],factions:['osman','karaman']});
+    for(const [building,x,y] of [['field',40,248],['ranch',52,168],['barracks',100,165],['tower',118,225]])issueCommand(match,{player:0,type:'build',building,x,y});
+    step(match,40);const keep=getState(match).players[0].keepId;issueCommand(match,{player:0,type:'recruitHero',hero:'osman_hero_0',building:keep});
+    const b=getState(match).entities.find(e=>e.type==='osman_barracks');if(b)issueCommand(match,{player:0,type:'produce',unit:'osman_infantry',building:b.id});
     step(match,30);const view=getState(match,0),map=this.catalog.maps.find(m=>m.id===view.config.map);
     this.field.setMap(map);this.field.setView(view,getVisibility(match,0),[],this.figureLayouts(match,view));this.field.focus(112,220);this.field.distance=innerWidth<600?230:255;this.field.updateCamera();
   }
@@ -133,7 +133,7 @@ class Game {
     if(assign){this.groups[n]=cleanSelection(this.view,this.selected);this.ui.toast(`${n}. gruba ${this.groups[n].length} birlik atandı.`);this.audio.vibrate();this.ui.update();}
     else {const ids=cleanSelection(this.view,this.groups[n]||[]);if(ids.length){this.select(ids);const e=this.view.entities.find(e=>e.id===ids[0]);this.field.focus(e.x,e.y);}else this.ui.toast(`${n}. grup boş. Seçip grup düğmesini basılı tut.`);}
   }
-  digit(n,assign) {if(assign){this.group(n,true);return;}if(this.tab==='build'&&n>=1&&n<=7){this.action('build',this.faction.buildings.filter(b=>b.type!=='keep')[n-1].id);}else this.group(n);}
+  digit(n,assign) {if(assign){this.group(n,true);return;}if(this.tab==='build'&&n>=1&&n<=8){this.action('build',this.faction.buildings.filter(b=>b.type!=='keep')[n-1].id);}else this.group(n);}
   ability(id,ability) {
     const hero=this.view.entities.find(e=>e.id===Number(id)&&e.player===0),d=hero&&definition(this.catalog,this.view,hero),a=d?.abilities.find(a=>a.id===ability);
     if(!a)return;
@@ -182,7 +182,7 @@ class Game {
     if(name==='ability'){this.ability(...value.split(':'));return;}
     if(name==='ability0'||name==='ability1'){const h=this.selected.map(id=>this.view.entities.find(e=>e.id===id)).find(e=>e.kind==='hero');if(h){const d=definition(this.catalog,this.view,h);this.ability(h.id,d.abilities[Number(name.slice(-1))].id);}else this.ui.toast('Önce bir kahraman seç.');return;}
     if(/^power[0-3]$/.test(name)){this.action('power',this.faction.powers[Number(name.slice(-1))].id);return;}
-    if(name==='power'){const a=this.faction.powers.find(a=>a.id===value);if(!a)return;if(a.kind==='economy'){if(this.command({type:'power',power:a.id}).ok)this.ui.toast('Öz desteği alındı.');}else this.setTarget({kind:'power',id:a.id,label:a.name,radius:a.radius});return;}
+    if(name==='power'){const a=this.faction.powers.find(a=>a.id===value);if(!a)return;if(a.kind==='economy'){if(this.command({type:'power',power:a.id}).ok)this.ui.toast('Akçe desteği alındı.');}else this.setTarget({kind:'power',id:a.id,label:a.name,radius:a.radius});return;}
     if(event)event.preventDefault();
   }
   changeSetup(key,value) {

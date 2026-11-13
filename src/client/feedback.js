@@ -67,7 +67,7 @@ export function personalNotices(events,player=0){
     if(e.player!==player)continue;
     if(e.type==='level'&&levels.get(e.id)===e)messages.push(`Birliğin ${e.level}. seviyeye ulaştı.`);
     if(e.type==='capture')messages.push('Karakol ele geçirildi · gelir artıyor.');
-    if(e.type==='camp')messages.push('Kamp temizlendi · öz ve deneyim kazanıldı.');
+    if(e.type==='camp')messages.push('Kamp temizlendi · akçe ve deneyim kazanıldı.');
     if(e.type==='upgrade')messages.push('Araştırma tamamlandı.');
   }
   return messages;

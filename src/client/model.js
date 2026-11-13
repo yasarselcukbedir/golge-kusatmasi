@@ -1,8 +1,8 @@
 export const clamp = (n,a,b) => Math.max(a,Math.min(b,n));
 export const timeText = seconds => `${Math.floor(Math.max(0,seconds)/60).toString().padStart(2,'0')}:${Math.floor(Math.max(0,seconds)%60).toString().padStart(2,'0')}`;
-export const ROLE_NAMES = {infantry:'Piyade',ranged:'Menzilli',cavalry:'Süvari',siege:'Kuşatma',special:'Uzman',hero:'Kahraman',neutral:'Kamp nöbetçisi',escort:'İkmal kızağı'};
-export const GLYPHS = {keep:'⌂',field:'▤',barracks:'⚑',range:'➶',stable:'♞',workshop:'⚒',forge:'◇',tower:'♜',infantry:'⚑',ranged:'➶',cavalry:'♞',siege:'⚒',special:'✧',hero:'✦',shield:'◈',economy:'✺',damage:'✹',summon:'⚑',heal:'✚',poison:'❋',stun:'⌁',buff:'✧'};
-export const EFFECT_NAMES = {shield:'Alan koruması',economy:'Öz desteği',damage:'Alan hasarı',summon:'Geçici tabur çağrısı',heal:'Alan iyileştirmesi',poison:'Süreli zehir',stun:'Sersemletme',buff:'Savaş teşviki'};
+export const ROLE_NAMES = {infantry:'Piyade',ranged:'Menzilli',cavalry:'Süvari',siege:'Kuşatma',special:'Uzman',hero:'Kahraman',neutral:'Kamp nöbetçisi',escort:'Kervan arabası'};
+export const GLYPHS = {keep:'⌂',field:'▤',ranch:'⌘',barracks:'⚑',range:'➶',stable:'♞',workshop:'⚒',forge:'◇',tower:'♜',infantry:'⚑',ranged:'➶',cavalry:'♞',siege:'⚒',special:'✧',hero:'✦',shield:'◈',economy:'✺',damage:'✹',summon:'⚑',heal:'✚',poison:'❋',stun:'⌁',buff:'✧'};
+export const EFFECT_NAMES = {shield:'Alan koruması',economy:'Akçe desteği',damage:'Alan hasarı',summon:'Geçici tabur çağrısı',heal:'Alan iyileştirmesi',poison:'Süreli zehir',stun:'Sersemletme',buff:'Savaş teşviki'};
 export function population(view,player=0) {return view.entities.filter(e=>e.player===player&&['unit','hero'].includes(e.kind)&&!e.expiresAt&&e.hp>0).length+view.entities.filter(e=>e.player===player&&e.hp>0).reduce((n,e)=>n+e.queue.length,0);}
 export function cleanSelection(view,ids) {return [...new Set(ids)].filter(id=>view.entities.some(e=>e.id===id&&e.player===0&&e.hp>0));}
 export function armyIds(view) {return view.entities.filter(e=>e.player===0&&e.hp>0&&['unit','hero'].includes(e.kind)).map(e=>e.id);}

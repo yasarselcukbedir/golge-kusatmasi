@@ -2,7 +2,7 @@
   "id": "./index.html",
   "name": "Gölge Kuşatması",
   "short_name": "Kuşatma",
-  "description": "Altı özgün sancağın üç boyutlu gerçek zamanlı strateji oyunu.",
+  "description": "Altı Anadolu beyliğiyle üç boyutlu gerçek zamanlı strateji oyunu.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

@@ -1,5 +1,7 @@
 # Gölge Kuşatması
 
+> **Anadolu beylikleri sürümü (Kasım 2026):** Taraflar artık Osmanoğulları, Aydınoğulları, Candaroğulları, Germiyanoğulları, Dulkadiroğulları ve Karamanoğulları; kahramanlar bu beyliklerin tarihî beyleri. Kaynaklar Akçe ve Kut olarak adlandırıldı, Çiftlik ile Ağıl gelir yapılarıdır. Taraf kimlikleri `osman, aydin, candar, germiyan, dulkadir, karaman` oldu. `docs/` altındaki raporlar ve bu belgenin aşağıdaki bazı örnekleri önceki adlandırmayı (sedef, filiz, köz, pus, yel, prizma) kullanır.
+
 Altı özgün sancağın gerçek zamanlı strateji oyunu. Bir merkezden başlayıp ekonomi kurar, tabur eğitir, kahraman çağırır, karakolları ele geçirir ve karşı takımın merkezlerini kuşatırsın. Açılı Three.js kamerasıyla üç boyutlu savaş alanı; dokunmatik telefonlar ve fare/klavyeli bilgisayarlar için tasarlanmıştır.
 
 Altı tarafın her birinde 5 tabur türü, 3 kahraman, kahraman başına 2 yetenek ve bir sürekli liderlik aurası, 4 güç, 8 yapı ve 4 araştırma bulunur. Taburlar savaşla 5. seviyeye kadar gelişir. Dört haritada dokuz takım düzeni (1’e 1’den 3’e 3’e, asimetrik düzenler dahil), müttefik yapay zekâ ve Kolay / Normal / Zor seçenekleri vardır. Üç bölümlük sefer sırasıyla merkez yıkma, karakol tutma ve kervana eşlik etme amaçlarını kullanır.
@@ -77,7 +79,7 @@ Bu teslim kapsamında yayın veya dağıtım yapılmamıştır; yukarıdaki adı
 
 Ana menüde **Çarpışma**, **Sefer**, **Devam et**, **Ayarlar** ve **Nasıl oynanır** bulunur. Çarpışma hazırlığında iki takımın boyutlarını ayrı seç; kendi, müttefik ve rakip yuvalarının taraflarını belirle. İlk yuvadaki komutan sensin, diğerleri yapay zekâdır. Takım arkadaşları görüş paylaşır. Üç sefer görevi sırayla açılır; tamamlanan bölümler yeniden oynanabilir. Yeni bir oyun, tek otomatik kayıt yuvasını kullanır.
 
-- **Öz** altın karşılığıdır; yapılar, taburlar, kahramanlar ve araştırmalar bu kaynağı harcar. Başlangıç geliri saniyede 3 özdür. Her tamamlanmış Hasatlık saniyede 2,5 öz ekler. **Uyum** güç kaynağıdır; zamanla ve hasar vererek birikir. Üst çubukta her ikisini ve nüfusu görürsün.
+- **Akçe** altın karşılığıdır; yapılar, taburlar, kahramanlar ve araştırmalar bu kaynağı harcar. Başlangıç geliri saniyede 3 akçedir; Çiftlik (+2,5) ve Ağıl (+3,2) geliri artırır. Her tamamlanmış Hasatlık saniyede 2,5 öz ekler. **Uyum** güç kaynağıdır; zamanla ve hasar vererek birikir. Üst çubukta her ikisini ve nüfusu görürsün.
 - **İnşa:** Yapı kartını seç, merkezinin çevresindeki 100 birimlik halkada bir konuma tıkla/dokun. Yapılar arasında en az 16 birim aralık gerekir. Yeşil/kırmızı yerleştirme önizlemesi yardımcıdır; son kararı simülasyon verir. İnşaat görünür biçimde yükselir; tamamlanmadan üretim yapılamaz.
 - **Üretim:** Saf Ocağı piyade ve uzman; Atış Meydanı menzilli; Binek Avlusu süvari; Kuşatma İşliği kuşatma üretir. Tamamlanan yapıyı seç, kartlarına bas. Kuyruk en fazla 5 öğe tutar; sıradaki taburlar da nüfus ayırır. Üretim kartları tekrar basılarak kuyruğa eklenir. İptal/iade işlemi yoktur.
 - **Toplanma:** Bir bina seçip sağ tıkla veya **Toplan** düğmesinden bir yer hedefle. Yeni eğitilen birlikler o noktaya saldırarak ilerler. Bayrak etkisi ve bildirim hedefi onaylar.
@@ -109,7 +111,7 @@ Ana menüde **Çarpışma**, **Sefer**, **Devam et**, **Ayarlar** ve **Nasıl oy
 | T veya Ctrl+A | Bütün kendi tabur ve kahramanlarını seç |
 | Ctrl+1…9 / 1…9 | Kontrol grubu ata / grubu seç ve kamerayı götür |
 | B / H / F / U | İnşa / Kahraman / Güçler / Seçim sekmesi |
-| B, ardından 1…7 | Sırayla Hasatlık, Saf Ocağı, Atış Meydanı, Binek Avlusu, Kuşatma İşliği, Gelişim Evi, Gözcü Kulesi seç; ardından haritaya yerleştir |
+| B, ardından 1…8 | Sırayla Çiftlik, Ağıl, Yaya Ocağı, Okmeydanı, Tavla, Cebehane, Demirci Ocağı, Gözcü Kulesi seç; ardından haritaya yerleştir |
 | M / G | Yürü / saldırarak ilerle; ardından hedef tıkla |
 | R | Seçili birlikleri geri çek |
 | Y | Seçili bina için toplanma hedefi seç |

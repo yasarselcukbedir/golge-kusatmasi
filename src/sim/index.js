@@ -139,7 +139,7 @@ export function issueCommand(match,c){
  if(c.type==='build'){
   const d=f.buildings.find(d=>d.id===c.building||d.type===c.building);if(!d||d.type==='keep'||!point())return fail('Geçersiz yapı');
   if(distance(p.home,c)>RULES.buildRadius||s.entities.some(e=>alive(e)&&e.kind==='building'&&distance(e,c)<16))return fail('Yapı alanı uygun değil');
-  if(!spend(p,d.cost))return fail('Yeterli öz yok');
+  if(!spend(p,d.cost))return fail('Yeterli akçe yok');
   const e=spawn(s,p.id,d.id,c.x,c.y,{readyAt:s.time+d.buildTime});p.stats.buildings++;emit(s,'construction',{id:e.id});return {ok:true,id:e.id};
  }
  if(c.type==='setRally'||c.type==='set_rally'){
@@ -151,13 +151,13 @@ export function issueCommand(match,c){
   const bd=defOf(s,b);if(hero?bd.type!=='keep':bd.type!==d.production)return fail('Yanlış üretim binası');
   if(b.queue.length>=RULES.queueLimit||population(s,p.id)>=f.population)return fail('Kapasite dolu');
   if(hero&&s.entities.some(e=>e.player===p.id&&(e.type===d.id&&alive(e)||e.queue.some(q=>q.type===d.id))))return fail('Kahraman zaten mevcut');
-  if(!spend(p,d.cost))return fail('Yeterli öz yok');const diff=DIFFICULTIES.find(d=>d.id===p.difficulty);
+  if(!spend(p,d.cost))return fail('Yeterli akçe yok');const diff=DIFFICULTIES.find(d=>d.id===p.difficulty);
   const duration=d.train*(p.ai?diff.production:1);b.queue.push({type:d.id,hero,remaining:duration,duration});emit(s,'queued',{id:b.id,unit:d.id});return {ok:true};
  }
  if(c.type==='research'||c.type==='researchUpgrade'||c.type==='research_upgrade'){
   const d=f.upgrades.find(d=>d.id===c.upgrade);if(!d||p.research||p.upgrades.includes(d.id))return fail('Gelişim seçilemez');
   const b=s.entities.find(e=>e.player===p.id&&alive(e)&&defOf(s,e)?.type==='forge'&&ready(s,e));if(!b)return fail('Gelişim Evi gerekli');
-  if(!spend(p,d.cost))return fail('Yeterli öz yok');p.research={id:d.id,remaining:d.researchTime,building:b.id};return {ok:true};
+  if(!spend(p,d.cost))return fail('Yeterli akçe yok');p.research={id:d.id,remaining:d.researchTime,building:b.id};return {ok:true};
  }
  if(c.type==='ability'||c.type==='useAbility'||c.type==='use_ability'){
   const h=own(c.hero??c.id),d=h&&f.heroes.find(d=>d.id===h.type),a=d?.abilities.find(a=>a.id===c.ability);
@@ -318,7 +318,7 @@ function aiTurn(match,p){const s=match.state;if(s.time<p.aiState.next||!entity(s
  const f=playerFaction(s,p.id),owned=s.entities.filter(e=>e.player===p.id&&alive(e)),buildings=owned.filter(e=>e.kind==='building'),army=owned.filter(e=>['unit','hero'].includes(e.kind)&&!e.expiresAt);
  const cmd=c=>issueCommand(match,{player:p.id,...c});
  const count=t=>buildings.filter(e=>defOf(s,e).type===t).length;
- let wanted=count('field')<2?'field':!count('barracks')?'barracks':!count('range')?'range':!count('stable')?'stable':!count('workshop')?'workshop':!count('forge')?'forge':!count('tower')?'tower':count('field')<3?'field':null;
+ let wanted=!count('field')?'field':!count('ranch')?'ranch':!count('barracks')?'barracks':!count('range')?'range':!count('stable')?'stable':!count('workshop')?'workshop':!count('forge')?'forge':!count('tower')?'tower':count('field')<2?'field':count('ranch')<2?'ranch':null;
  if(wanted){const angle=buildings.length*2.3999632297,r=40+Math.floor(buildings.length/6)*28;let pos={x:p.home.x+Math.cos(angle)*r,y:p.home.y+Math.sin(angle)*r};
   const map=mapById(s.config.map);pos.x=clamp(pos.x,18,map.width-18);pos.y=clamp(pos.y,18,map.height-18);cmd({type:'build',building:wanted,...pos});
  }
