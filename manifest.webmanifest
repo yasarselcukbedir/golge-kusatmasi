@@ -1,7 +1,7 @@
 {
   "id": "./index.html",
-  "name": "Beylikler Çağı",
-  "short_name": "Beylikler",
+  "name": "Uç Beyleri",
+  "short_name": "Uç Beyleri",
   "description": "Altı Anadolu beyliğiyle üç boyutlu gerçek zamanlı strateji oyunu.",
   "start_url": "./index.html",
   "scope": "./",

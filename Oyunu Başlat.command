@@ -8,7 +8,7 @@ while lsof -Pi :$PORT -sTCP:LISTEN -t >/dev/null 2>&1; do
 done
 
 echo "========================================"
-echo "      Beylikler Çağı Başlatılıyor       "
+echo "        Uç Beyleri Başlatılıyor         "
 echo "========================================"
 echo "Web sunucusu port $PORT üzerinde çalışıyor..."
 echo "Tarayıcınız açılıyor: http://localhost:$PORT"

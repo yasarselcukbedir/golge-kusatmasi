@@ -1,4 +1,4 @@
-# Beylikler Çağı (eski adıyla Gölge Kuşatması) — W2 teslimi
+# Uç Beyleri (eski adıyla Gölge Kuşatması) — W2 teslimi
 
 Statik Three.js istemcisi `game/` altında; Türkçe kullanım ve yayın kılavuzu [README.md](README.md) içindedir. Sözleşmedeki çift önekli yollar için aynı dosyalar ayrıca `deliverable/game/` ve `deliverable/README.md` altında bulunur. İki oyun klasörü bağımsız servis edilebilir; birini yayımlamak yeterlidir.
 

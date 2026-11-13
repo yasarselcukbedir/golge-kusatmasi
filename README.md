@@ -1,4 +1,4 @@
-# Beylikler Çağı
+# Uç Beyleri
 
 > Oyunun önceki adı Gölge Kuşatması’ydı; depo adı ve yayın adresi (`golge-kusatmasi`) kurulu uygulamalar bozulmasın diye aynı kaldı.
 
